@@ -14,6 +14,11 @@ public class SvmStack {
 		private final byte[] stackSpace;
 		private int next;
 
+		public StackFrame(int size) {
+			stackSpace = new byte[size];
+			next = 0;
+		}
+
 		public StackFrame(StackFrame prevSF, int size, int returnAddress, int objPointer, SvmMethod method) throws StackOverflowException, StackException {
 			stackSpace = new byte[size];
 			next = 0;
@@ -26,7 +31,7 @@ public class SvmStack {
 			pushInt(objPointer);
 
 			// 1 - n (args + other locals)
-			for (int i = 0; i < method.arguments.length; i++) {
+			for (int i = 0; i < method.arguments.length + method.locals.length; i++) {
 				// fill all to 0
 				for (int j = 0; j < SvmType.TYPE_BYTE_SIZE; j++) {
 					stackSpace[next++] = 0;
@@ -113,7 +118,10 @@ public class SvmStack {
 	public SvmStack(int stackFramesCount, int stackFrameSize) {
 		stackFrames = new StackFrame[stackFramesCount];
 		this.stackFrameSize = stackFrameSize;
-		csfIndex = -1;
+
+		// init program stack
+		csfIndex = 0;
+		stackFrames[csfIndex] = new StackFrame(128);
 	}
 
 	public void beginStackFrame(int returnAddress, int objPointer, SvmMethod method) throws StackOverflowException, StackException {

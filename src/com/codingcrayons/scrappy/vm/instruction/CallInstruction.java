@@ -9,7 +9,7 @@ import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmMethod;
 import com.codingcrayons.scrappy.vm.util.Utils;
 
-public class Callnstruction implements Instruction {
+public class CallInstruction implements Instruction {
 
 	@Override
 	public void process(ScrappyVM vm) throws MethodNotFoundException, PointerIsNullException, StackException, StackOverflowException {

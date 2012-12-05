@@ -22,7 +22,7 @@ public class InstructionList {
 
 	public int addInstruction(String instruction) {
 		instructions.add(instruction);
-		return ++ic;
+		return ic++;
 	}
 
 	public String nextInstruction() {

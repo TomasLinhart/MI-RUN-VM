@@ -19,12 +19,19 @@ public class ScrappyVM {
 		stack = new SvmStack(100, 1024);
 		heap = new SvmHeap(1024, this);
 
+		init();
 		Interpreter.interpret(this);
 	}
 
 	public void init() throws ClassNotFoundException {
-		// int address = heap.alloc(permGenSpace.getClass("Main"));
+		int address = heap.alloc(permGenSpace.getClass("Main"));
 
+		int start = instructionList.addInstruction("ipush");
+		instructionList.addInstruction("" + address);
+		instructionList.addInstruction("invokevirtual");
+		instructionList.addInstruction("main:");
+		instructionList.addInstruction(null);
+		instructionList.jump(start);
 	}
 
 	/**

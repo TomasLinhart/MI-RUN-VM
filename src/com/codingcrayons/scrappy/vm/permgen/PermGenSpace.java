@@ -13,10 +13,11 @@ public class PermGenSpace {
 
 	public PermGenSpace(String[] classFiles, InstructionList instructionList) {
 		classTable = new HashMap<String, Integer>(classFiles.length);
-		classes = new SvmClass[classFiles.length];
+		classes = new SvmClass[classFiles.length + 1];
 		for (String classFile : classFiles) {
 			addClass(ClassLoader.load(classFile, instructionList));
 		}
+		addClass(init(instructionList));
 	}
 
 	private void addClass(SvmClass clazz) {
@@ -48,4 +49,24 @@ public class PermGenSpace {
 		}
 	}
 
+	private SvmClass init(InstructionList instructionList) {
+
+		int length = instructionList.addInstruction("getfield");
+		instructionList.addInstruction("0");
+		instructionList.addInstruction("ireturn");
+
+		SvmMethod lengthM = new SvmMethod("length:", new SvmField[] {}, new SvmField[] {}, SvmType.VOID, length);
+
+		int cP = instructionList.addInstruction("return");
+		SvmMethod c = new SvmMethod("_:", new SvmField[] {}, new SvmField[] {}, SvmType.INT, cP);
+
+		SvmClass mainC = new SvmClass(
+				"String",
+				new SvmMethod[] { c },
+				new SvmField[] { new SvmField("length", SvmType.INT), new SvmField("bytesCount", SvmType.INT) },
+				new SvmMethod[] { lengthM },
+				null);
+
+		return mainC;
+	}
 }

@@ -21,9 +21,30 @@ public class SvmHeap {
 		int start = next;
 
 		insertIntToHeap(clazz.address);
-		int fieldsSize = (clazz.fields.length + 1) * SvmType.TYPE_BYTE_SIZE;
+		int fieldsSize = clazz.fields.length * SvmType.TYPE_BYTE_SIZE;
 		for (; fieldsSize > 0; fieldsSize--) {
 			space[next++] = 0;
+		}
+		return start;
+	}
+
+	public int allocArray(int size) {
+		int start = next;
+
+		insertIntToHeap(size);
+
+		int fieldsSize = size * SvmType.TYPE_BYTE_SIZE;
+		for (; fieldsSize > 0; fieldsSize--) {
+			space[next++] = 0;
+		}
+		return start;
+	}
+
+	public int allocByteClass(SvmClass clazz, byte[] bytes) {
+		int start = alloc(clazz);
+
+		for (int i = 0; i < bytes.length; i++) {
+			space[next++] = bytes[i];
 		}
 		return start;
 	}
