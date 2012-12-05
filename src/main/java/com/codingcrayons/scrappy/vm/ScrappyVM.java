@@ -5,8 +5,11 @@ import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
 import com.codingcrayons.scrappy.vm.instruction.InstructionList;
 import com.codingcrayons.scrappy.vm.permgen.PermGenSpace;
 import com.codingcrayons.scrappy.vm.stack.SvmStack;
+import org.apache.log4j.Logger;
 
 public class ScrappyVM {
+	
+	private static final Logger logger = Logger.getLogger(ScrappyVM.class);
 
 	public InstructionList instructionList;
 	public PermGenSpace permGenSpace;
@@ -40,6 +43,7 @@ public class ScrappyVM {
 	 * @throws ScrappyVmException 
 	 */
 	public static void main(String[] args) throws ScrappyVmException {
+		logger.debug("DEBUG TEST");
 		new ScrappyVM(args);
 	}
 

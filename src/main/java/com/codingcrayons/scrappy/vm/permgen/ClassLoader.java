@@ -7,8 +7,7 @@ public class ClassLoader {
 	public static SvmClass load(String classFile, InstructionList instructionList) {
 		// new object, call main
 
-		int mainP = instructionList.addInstruction("ipush");
-		instructionList.addInstruction("101222");
+		int mainP = instructionList.addInstruction("ipush 101222");
 		instructionList.addInstruction("syscall");
 		instructionList.addInstruction("0"); // print int
 
