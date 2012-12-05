@@ -39,14 +39,14 @@ public class SvmStack {
 			}
 
 			// current frame is the caller frame
-			for (int i = method.arguments.length; i > 0; i++) {
+			for (int i = method.arguments.length - 1; i >= 0; i--) {
 				SvmField argument = method.arguments[i];
 				if (argument.type.equals(SvmType.INT)) {
 					int value = prevSF.popInt();
-					prevSF.setLocalInt(i, value);
-				} else if (argument.type.equals(SvmType.INT)) {
+					setLocalInt(1 + i, value);
+				} else if (argument.type.equals(SvmType.POINTER)) {
 					int pointer = prevSF.popPointer();
-					prevSF.setLocalPointer(i, pointer);
+					setLocalPointer(1 + i, pointer);
 				}
 			}
 
@@ -79,6 +79,10 @@ public class SvmStack {
 
 		public int getReturnAddress() {
 			return Utils.byteArrayToInt(stackSpace, 0);
+		}
+
+		public byte[] getLocalValue(int index) {
+			return Utils.subArray(stackSpace, index * SvmType.TYPE_BYTE_SIZE + SvmType.TYPE_BYTE_SIZE, SvmType.TYPE_BYTE_SIZE);
 		}
 
 		public int getLocalInt(int index) {
@@ -164,6 +168,10 @@ public class SvmStack {
 
 	public int getLocalPointer(int index) {
 		return currentStackFrame().getLocalPointer(index);
+	}
+
+	public byte[] getLocalValue(int index) {
+		return currentStackFrame().getLocalValue(index);
 	}
 
 	public void setLocalInt(int index, int value) {

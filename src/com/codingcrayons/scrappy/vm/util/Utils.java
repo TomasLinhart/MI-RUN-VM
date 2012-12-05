@@ -1,6 +1,8 @@
 package com.codingcrayons.scrappy.vm.util;
 
+import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.exceptions.PointerIsNullException;
+import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
 
 public class Utils {
@@ -11,6 +13,14 @@ public class Utils {
 
 	public static int byteArrayToInt(byte[] bytes, int from) {
 		return bytes[from] << 24 | (bytes[from + 1] & 0xFF) << 16 | (bytes[from + 2] & 0xFF) << 8 | (bytes[from + 3] & 0xFF);
+	}
+
+	public static byte[] subArray(byte[] bytes, int from, int size) {
+		byte[] val = new byte[size];
+		for (int i = 0; i < size; i++) {
+			val[i] = bytes[from + i];
+		}
+		return val;
 	}
 
 	public static byte[] getObjectFieldValue(byte[] bytes, int objectStart, int index) {
@@ -45,6 +55,15 @@ public class Utils {
 		if (pointer == 0) {
 			throw new PointerIsNullException();
 		}
+	}
+
+	public static int createSringOnHeap(ScrappyVM vm, SvmClass clazz, byte[] bytes, String value) {
+		int pointer = vm.heap.allocByteClass(clazz, bytes);
+
+		Utils.setObjectFieldValue(vm.heap.getSpace(), pointer, 0, Utils.intToByteArray(value.length()));
+		Utils.setObjectFieldValue(vm.heap.getSpace(), pointer, 1, Utils.intToByteArray(bytes.length));
+
+		return pointer;
 	}
 
 }

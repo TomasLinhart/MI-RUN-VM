@@ -57,14 +57,58 @@ public class PermGenSpace {
 
 		SvmMethod lengthM = new SvmMethod("length:", new SvmField[] {}, new SvmField[] {}, SvmType.VOID, length);
 
+		int appP = instructionList.addInstruction("syscall");
+		instructionList.addInstruction("2");
+		instructionList.addInstruction("preturn");
+
+		SvmMethod append = new SvmMethod(
+				"append:Pointer",
+				new SvmField[] { new SvmField("otherstring", SvmType.POINTER) },
+				new SvmField[] {},
+				SvmType.POINTER,
+				appP);
+
+		int splitP = instructionList.addInstruction("syscall");
+		instructionList.addInstruction("4");
+		instructionList.addInstruction("preturn");
+
+		SvmMethod split = new SvmMethod(
+				"split",
+				new SvmField[] {},
+				new SvmField[] {},
+				SvmType.POINTER,
+				splitP);
+
+		int toIntP = instructionList.addInstruction("syscall");
+		instructionList.addInstruction("5");
+		instructionList.addInstruction("ireturn");
+
+		SvmMethod toInt = new SvmMethod(
+				"toInt",
+				new SvmField[] {},
+				new SvmField[] {},
+				SvmType.POINTER,
+				toIntP);
+
 		int cP = instructionList.addInstruction("return");
 		SvmMethod c = new SvmMethod("_:", new SvmField[] {}, new SvmField[] {}, SvmType.INT, cP);
+
+		int appI = instructionList.addInstruction("syscall");
+		instructionList.addInstruction("3");
+		instructionList.addInstruction("preturn");
+
+		SvmMethod appendI = new SvmMethod(
+				"append:Int",
+				new SvmField[] { new SvmField("i", SvmType.INT) },
+				new SvmField[] {},
+				SvmType.POINTER,
+				appI);
 
 		SvmClass mainC = new SvmClass(
 				"String",
 				new SvmMethod[] { c },
 				new SvmField[] { new SvmField("length", SvmType.INT), new SvmField("bytesCount", SvmType.INT) },
-				new SvmMethod[] { lengthM },
+				new SvmMethod[] { lengthM, append, appendI, split, toInt },
 				null);
 
 		return mainC;

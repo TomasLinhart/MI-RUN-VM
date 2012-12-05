@@ -7,7 +7,7 @@ public class InstructionSet {
 	public static Instruction[] instructions;
 
 	static {
-		instructions = new Instruction[31];
+		instructions = new Instruction[32];
 		instructions[0] = new PushIntInstruction();
 		instructions[1] = new PushPointerInstruction();
 		instructions[2] = new SyscallInstruction();
@@ -39,13 +39,14 @@ public class InstructionSet {
 		instructions[28] = new JumpInstruction();
 		instructions[29] = new ArrayLengthInstruction();
 		instructions[30] = new NewStringInstruction();
+		instructions[31] = new DupInstruction();
 	}
 
 	public static Instruction getInstruction(String identifier) throws UnknownInstructionException {
 		if (identifier.equals("ipush")) {
 			return instructions[0];
 		}
-		if (identifier.equals("apush")) {
+		if (identifier.equals("ppush")) {
 			return instructions[1];
 		}
 		if (identifier.equals("syscall")) {
@@ -66,7 +67,7 @@ public class InstructionSet {
 		if (identifier.equals("ireturn")) {
 			return instructions[7];
 		}
-		if (identifier.equals("areturn")) {
+		if (identifier.equals("preturn")) {
 			return instructions[8];
 		}
 		if (identifier.equals("return")) {
@@ -134,6 +135,9 @@ public class InstructionSet {
 		}
 		if (identifier.equals("newstring")) {
 			return instructions[30];
+		}
+		if (identifier.equals("dup")) {
+			return instructions[31];
 		}
 
 		throw new UnknownInstructionException(identifier);
