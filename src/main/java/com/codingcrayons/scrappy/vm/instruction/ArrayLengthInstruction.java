@@ -6,10 +6,10 @@ import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.util.Utils;
 
-public class ArrayLengthInstruction implements Instruction {
+public class ArrayLengthInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws ClassNotFoundException, StackOverflowException, StackException {
+	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException, StackException {
 		int pointer = vm.stack.popPointer();
 		int size = Utils.byteArrayToInt(vm.heap.getSpace(), pointer);
 		vm.stack.pushInt(size);

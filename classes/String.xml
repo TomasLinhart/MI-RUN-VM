@@ -13,18 +13,18 @@
 				</instructions>
 			</method>
 			<method name="append:String" type="String">
-				<arguments>
-					<argument name="s" type="String" />
-				</arguments>
+				<args>
+					<arg name="s" type="String" />
+				</args>
 				<instructions>
 					<instruction>syscall 2</instruction>
 					<instruction>preturn</instruction>
 				</instructions>
 			</method>
 			<method name="append:Integer" type="String">
-				<arguments>
-					<argument name="i" type="Integer" />
-				</arguments>
+				<args>
+					<arg name="i" type="Integer" />
+				</args>
 				<instructions>
 					<instruction>syscall 3</instruction>
 					<instruction>preturn</instruction>

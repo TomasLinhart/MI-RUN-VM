@@ -4,11 +4,11 @@ import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 
-public class NewArrayInstruction implements Instruction {
+public class NewArrayInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws ClassNotFoundException, StackOverflowException {
-		int size = Integer.parseInt(vm.instructionList.nextInstruction());
+	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException {
+		int size = Integer.parseInt(params[0]);
 		int pointer = vm.heap.allocArray(size);
 		vm.stack.pushPointer(pointer);
 	}

@@ -7,11 +7,11 @@ import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.util.Utils;
 
-public class SetFieldInstruction implements Instruction {
+public class SetFieldInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws ClassNotFoundException, StackOverflowException, StackException, PointerIsNullException {
-		int fieldIndex = Integer.parseInt(vm.instructionList.nextInstruction());
+	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException, StackException, PointerIsNullException {
+		int fieldIndex = Integer.parseInt(params[0]);
 		int objPointer = vm.stack.popPointer();
 
 		Utils.checkNullPointer(objPointer);

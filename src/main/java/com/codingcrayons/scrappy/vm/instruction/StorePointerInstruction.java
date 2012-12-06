@@ -6,11 +6,11 @@ import com.codingcrayons.scrappy.vm.exceptions.PointerIsNullException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 
-public class StorePointerInstruction implements Instruction {
+public class StorePointerInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws ClassNotFoundException, StackOverflowException, StackException, PointerIsNullException {
-		int localFieldIndex = Integer.parseInt(vm.instructionList.nextInstruction());
+	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException, StackException, PointerIsNullException {
+		int localFieldIndex = Integer.parseInt(params[0]);
 		int pointer = vm.stack.popPointer();
 
 		vm.stack.setLocalPointer(localFieldIndex, pointer);

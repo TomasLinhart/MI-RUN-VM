@@ -5,9 +5,12 @@ import java.util.List;
 
 public class InstructionList {
 
-	// permgen of instuctions - size can be restricted
-	// later can be byte array
+	/**
+	 * permgen of instuctions - size can be restricted
+	 * later can be byte array
+	 */
 	private final List<String> instructions;
+
 	/**
 	 * program counter
 	 */
@@ -16,7 +19,7 @@ public class InstructionList {
 
 	public InstructionList() {
 		instructions = new ArrayList<String>();
-		pc = 1;
+		pc = -1;
 		ic = 0;
 	}
 
@@ -26,11 +29,11 @@ public class InstructionList {
 	}
 
 	public String nextInstruction() {
-		return instructions.get(pc++);
+		return instructions.get(++pc);
 	}
 
 	public void jump(int address) {
-		pc = address;
+		pc = address - 1;
 	}
 
 	public int getPc() {

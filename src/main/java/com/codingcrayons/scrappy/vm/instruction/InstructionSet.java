@@ -43,101 +43,101 @@ public class InstructionSet {
 	}
 
 	public static Instruction getInstruction(String identifier) throws UnknownInstructionException {
-		if (identifier.equals("ipush")) {
+		if (identifier.startsWith("ipush")) {
 			return instructions[0];
 		}
-		if (identifier.equals("ppush")) {
+		if (identifier.startsWith("ppush")) {
 			return instructions[1];
 		}
-		if (identifier.equals("syscall")) {
+		if (identifier.startsWith("syscall")) {
 			return instructions[2];
 		}
-		if (identifier.equals("new")) {
-			return instructions[3];
-		}
-		if (identifier.equals("invokevirtual")) {
+		if (identifier.startsWith("invokevirtual")) {
 			return instructions[4];
 		}
-		if (identifier.equals("getfield")) {
+		if (identifier.startsWith("getfield")) {
 			return instructions[5];
 		}
-		if (identifier.equals("setfield")) {
+		if (identifier.startsWith("setfield")) {
 			return instructions[6];
 		}
-		if (identifier.equals("ireturn")) {
+		if (identifier.startsWith("ireturn")) {
 			return instructions[7];
 		}
-		if (identifier.equals("preturn")) {
+		if (identifier.startsWith("preturn")) {
 			return instructions[8];
 		}
-		if (identifier.equals("return")) {
+		if (identifier.startsWith("return")) {
 			return instructions[9];
 		}
-		if (identifier.equals("iadd")) {
+		if (identifier.startsWith("iadd")) {
 			return instructions[10];
 		}
-		if (identifier.equals("isub")) {
+		if (identifier.startsWith("isub")) {
 			return instructions[11];
 		}
-		if (identifier.equals("imul")) {
+		if (identifier.startsWith("imul")) {
 			return instructions[12];
 		}
-		if (identifier.equals("idiv")) {
+		if (identifier.startsWith("idiv")) {
 			return instructions[13];
 		}
-		if (identifier.equals("imod")) {
+		if (identifier.startsWith("imod")) {
 			return instructions[14];
 		}
-		if (identifier.equals("ifeq")) {
+		if (identifier.startsWith("ifeq")) {
 			return instructions[15];
 		}
-		if (identifier.equals("ifge")) {
+		if (identifier.startsWith("ifge")) {
 			return instructions[16];
 		}
-		if (identifier.equals("ifgt")) {
+		if (identifier.startsWith("ifgt")) {
 			return instructions[17];
 		}
-		if (identifier.equals("ifle")) {
+		if (identifier.startsWith("ifle")) {
 			return instructions[18];
 		}
-		if (identifier.equals("iflt")) {
+		if (identifier.startsWith("iflt")) {
 			return instructions[19];
 		}
-		if (identifier.equals("ifneq")) {
+		if (identifier.startsWith("ifneq")) {
 			return instructions[20];
 		}
-		if (identifier.equals("ifnotnull")) {
+		if (identifier.startsWith("ifnotnull")) {
 			return instructions[21];
 		}
-		if (identifier.equals("ifnull")) {
+		if (identifier.startsWith("ifnull")) {
 			return instructions[22];
 		}
-		if (identifier.equals("newarray")) {
+		if (identifier.startsWith("newarray")) {
 			return instructions[23];
 		}
-		if (identifier.equals("iload")) {
+		if (identifier.startsWith("iload")) {
 			return instructions[24];
 		}
-		if (identifier.equals("pload")) {
+		if (identifier.startsWith("pload")) {
 			return instructions[25];
 		}
-		if (identifier.equals("istore")) {
+		if (identifier.startsWith("istore")) {
 			return instructions[26];
 		}
-		if (identifier.equals("pstore")) {
+		if (identifier.startsWith("pstore")) {
 			return instructions[27];
 		}
-		if (identifier.equals("jump")) {
+		if (identifier.startsWith("jump")) {
 			return instructions[28];
 		}
-		if (identifier.equals("arraylength")) {
+		if (identifier.startsWith("arraylength")) {
 			return instructions[29];
 		}
-		if (identifier.equals("newstring")) {
+		if (identifier.startsWith("newstring")) {
 			return instructions[30];
 		}
-		if (identifier.equals("dup")) {
+		if (identifier.startsWith("dup")) {
 			return instructions[31];
+		}
+		if (identifier.startsWith("new")) {
+			return instructions[3];
 		}
 
 		throw new UnknownInstructionException(identifier);

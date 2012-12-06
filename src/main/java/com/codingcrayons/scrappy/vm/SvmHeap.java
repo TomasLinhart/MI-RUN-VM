@@ -1,16 +1,22 @@
 package com.codingcrayons.scrappy.vm;
 
+import org.apache.log4j.Logger;
+
 import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
 import com.codingcrayons.scrappy.vm.util.Utils;
 
 public class SvmHeap {
 
+	private static final Logger logger = Logger.getLogger(SvmHeap.class);
+
 	private final byte[] space;
 	private int next;
 	private final ScrappyVM vm;
 
 	public SvmHeap(int size, ScrappyVM vm) {
+		logger.info("Heap of " + size + " bytes ready");
+
 		space = new byte[size];
 		next = 0;
 		space[next++] = 0; // null pointer location

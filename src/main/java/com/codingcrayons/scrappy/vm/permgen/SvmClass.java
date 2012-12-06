@@ -11,12 +11,10 @@ public class SvmClass {
 	public String name;
 	public SvmField[] fields;
 	public HashMap<String, SvmMethod> methods;
-	public SvmMethod[] constructors;
 	public SvmClass superClass;
 
-	public SvmClass(String name, SvmMethod[] constructors, SvmField[] fields, SvmMethod[] methods, SvmClass superClass) {
+	public SvmClass(String name, SvmField[] fields, SvmMethod[] methods, SvmClass superClass) {
 		this.name = name;
-		this.constructors = constructors;
 		this.fields = fields;
 
 		this.methods = new HashMap<String, SvmMethod>(methods.length);

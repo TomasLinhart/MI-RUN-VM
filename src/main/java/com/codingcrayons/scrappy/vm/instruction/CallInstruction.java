@@ -9,11 +9,11 @@ import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmMethod;
 import com.codingcrayons.scrappy.vm.util.Utils;
 
-public class CallInstruction implements Instruction {
+public class CallInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws MethodNotFoundException, PointerIsNullException, StackException, StackOverflowException {
-		String methodName = vm.instructionList.nextInstruction();
+	public void process(ScrappyVM vm, String[] params) throws MethodNotFoundException, PointerIsNullException, StackException, StackOverflowException {
+		String methodName = params[0];
 		int objPointer = vm.stack.popPointer();
 
 		Utils.checkNullPointer(objPointer);
@@ -25,7 +25,7 @@ public class CallInstruction implements Instruction {
 			throw new MethodNotFoundException(clazz.name, methodName);
 		}
 
-		vm.stack.beginStackFrame(vm.instructionList.getPc(), objPointer, method);
+		vm.stack.beginStackFrame(vm.instructionList.getPc() + 1, objPointer, method);
 
 		vm.instructionList.jump(method.instructionPointer);
 	}

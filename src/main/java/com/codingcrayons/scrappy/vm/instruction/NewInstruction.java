@@ -5,11 +5,11 @@ import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 
-public class NewInstruction implements Instruction {
+public class NewInstruction extends Instruction {
 
 	@Override
-	public void process(ScrappyVM vm) throws ClassNotFoundException, StackOverflowException {
-		String className = vm.instructionList.nextInstruction();
+	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException {
+		String className = params[0];
 		SvmClass clazz = vm.permGenSpace.getClass(className);
 		int pointer = vm.heap.alloc(clazz);
 		vm.stack.pushPointer(pointer);

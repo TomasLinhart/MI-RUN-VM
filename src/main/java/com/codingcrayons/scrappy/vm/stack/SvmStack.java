@@ -1,5 +1,7 @@
 package com.codingcrayons.scrappy.vm.stack;
 
+import org.apache.log4j.Logger;
+
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.permgen.SvmField;
@@ -115,11 +117,15 @@ public class SvmStack {
 
 	}
 
+	private static final Logger logger = Logger.getLogger(SvmStack.class);
+
 	private final StackFrame[] stackFrames;
 	private final int stackFrameSize;
 	private int csfIndex;
 
 	public SvmStack(int stackFramesCount, int stackFrameSize) {
+		logger.info(stackFramesCount + " stack frames by " + stackFrameSize + " bytes ready");
+
 		stackFrames = new StackFrame[stackFramesCount];
 		this.stackFrameSize = stackFrameSize;
 

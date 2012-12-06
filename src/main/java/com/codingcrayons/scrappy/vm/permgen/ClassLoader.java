@@ -1,196 +1,164 @@
 package com.codingcrayons.scrappy.vm.permgen;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.dom4j.Attribute;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
 import com.codingcrayons.scrappy.vm.instruction.InstructionList;
 
 public class ClassLoader {
 
-	public static SvmClass load(String classFile, InstructionList instructionList) {
-		// new object, call main
+	public static List<SvmClass> load(String[] classFiles, InstructionList instructionList) throws DocumentException {
 
-		int mainP = instructionList.addInstruction("ipush 101222");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+		List<SvmClass> loadedClasses = new LinkedList<SvmClass>();
+		for (String classFile : classFiles) {
+			loadedClasses.addAll(parse(new File(classFile), instructionList));
+		}
 
-		instructionList.addInstruction("newarray");
-		instructionList.addInstruction("5");
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("1");
+		return loadedClasses;
+	}
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("arraylength");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+	private static List<SvmClass> parse(File file, InstructionList instructionList) throws DocumentException {
+		SAXReader reader = new SAXReader();
+		Document document = reader.read(file);
 
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("10");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("setfield");
-		instructionList.addInstruction("0");
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("9");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("setfield");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("8");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("setfield");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("7");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("setfield");
-		instructionList.addInstruction("3");
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("6");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("setfield");
-		instructionList.addInstruction("4");
+		Element root = document.getRootElement();
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("0");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+		if (root.getName().equals("classes")) {
+			@SuppressWarnings("rawtypes")
+			Iterator iterator = root.elementIterator();
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+			List<SvmClass> loadedClasses = new ArrayList<SvmClass>(20);
+			while (iterator.hasNext()) {
+				Element element = (Element) iterator.next();
+				loadedClasses.add(processClassElement(element, instructionList));
+			}
+			return loadedClasses;
+		} else if (root.getName().equals("class")) {
+			List<SvmClass> loadedClasses = new ArrayList<SvmClass>(1);
+			loadedClasses.add(processClassElement(root, instructionList));
+			return loadedClasses;
+		}
+		return null;
+	}
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+	private static SvmClass processClassElement(Element root, InstructionList instructionList) {
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("4");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+		List<SvmField> fields = new ArrayList<SvmField>(0);
+		List<SvmMethod> methods = new LinkedList<SvmMethod>();
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("3");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0"); // print int
+		@SuppressWarnings("rawtypes")
+		Iterator iterator = root.elementIterator();
+		while (iterator.hasNext()) {
+			Element element = (Element) iterator.next();
+			if (element.getName().equals("fields")) {
+				fields = processFieldsElement(element);
+			} else if (element.getName().equals("methods")) {
+				@SuppressWarnings("rawtypes")
+				Iterator methodsIterator = element.elementIterator();
+				while (methodsIterator.hasNext()) {
+					Element methodElement = (Element) methodsIterator.next();
 
-		instructionList.addInstruction("newstring");
-		instructionList.addInstruction("HELLO FROM STRING");
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("3");
-		// instructionList.addInstruction("invokevirtual");
-		// instructionList.addInstruction("length:");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("3");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1"); // print int
+					List<SvmField> arguments = new ArrayList<SvmField>(0);
+					List<SvmField> locals = new ArrayList<SvmField>(0);
+					int instructionPointer = -1;
 
-		instructionList.addInstruction("newstring");
-		instructionList.addInstruction(" SECONF PART");
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("2");
-		// instructionList.addInstruction("invokevirtual");
-		// instructionList.addInstruction("length:");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1"); // print int
+					@SuppressWarnings("rawtypes")
+					Iterator methodIterator = methodElement.elementIterator();
+					while (methodIterator.hasNext()) {
+						Element methodSubElement = (Element) methodIterator.next();
+						if (methodSubElement.getName().equals("args")) {
+							arguments = processFieldsElement(methodSubElement);
+						} else if (methodSubElement.getName().equals("locals")) {
+							locals = processFieldsElement(methodSubElement);
+						} else if (methodSubElement.getName().equals("instructions")) {
+							@SuppressWarnings("rawtypes")
+							Iterator instructionsIterator = methodSubElement.elementIterator();
+							while (instructionsIterator.hasNext()) {
+								Element instruction = (Element) instructionsIterator.next();
+								int position = instructionList.addInstruction(instruction.getText());
+								if (instructionPointer < 0) {
+									instructionPointer = position;
+								}
+							}
+						}
+					}
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("3");
-		instructionList.addInstruction("invokevirtual");
-		instructionList.addInstruction("append:Pointer");
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("2");
+					String name = "";
+					SvmType returnType = null;
+					@SuppressWarnings("rawtypes")
+					Iterator methodAttributesIterator = methodElement.attributeIterator();
+					while (methodAttributesIterator.hasNext()) {
+						Attribute attribute = (Attribute) methodAttributesIterator.next();
+						if (attribute.getName().equals("name")) {
+							name = attribute.getValue();
+						} else if (attribute.getName().equals("type")) {
+							if (attribute.getValue().equals("Integer")) {
+								returnType = SvmType.INT;
+							} else if (attribute.getValue().equals("void")) {
+								returnType = SvmType.VOID;
+							} else {
+								returnType = SvmType.POINTER;
+							}
+						}
+					}
+					SvmMethod m = new SvmMethod(
+							name,
+							arguments.toArray(new SvmField[arguments.size()]),
+							locals.toArray(new SvmField[locals.size()]),
+							returnType,
+							instructionPointer);
+					methods.add(m);
+				}
+			}
+		}
+		String name = null;
+		@SuppressWarnings("rawtypes")
+		Iterator classAttributesIterator = root.attributeIterator();
+		while (classAttributesIterator.hasNext()) {
+			Attribute attribute = (Attribute) classAttributesIterator.next();
+			if (attribute.getName().equals("name")) {
+				name = attribute.getValue();
+			}
+		}
+		return new SvmClass(name, fields.toArray(new SvmField[fields.size()]), methods.toArray(new SvmMethod[methods.size()]), null);
+	}
 
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1"); // print int
+	private static List<SvmField> processFieldsElement(Element fieldsElement) {
+		List<SvmField> fields = new LinkedList<SvmField>();
 
-		instructionList.addInstruction("ipush");
-		instructionList.addInstruction("76598");
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("invokevirtual");
-		instructionList.addInstruction("append:Int");
+		@SuppressWarnings("rawtypes")
+		Iterator fieldsIterator = fieldsElement.elementIterator();
+		while (fieldsIterator.hasNext()) {
+			Element fieldElement = (Element) fieldsIterator.next();
 
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1"); // print int
-
-		instructionList.addInstruction("newstring");
-		instructionList.addInstruction("A H O J");
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("2");
-
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("invokevirtual");
-		instructionList.addInstruction("split");
-
-		instructionList.addInstruction("pstore");
-		instructionList.addInstruction("1");
-
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("0");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1");
-
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1");
-
-		instructionList.addInstruction("pload");
-		instructionList.addInstruction("1");
-		instructionList.addInstruction("getfield");
-		instructionList.addInstruction("2");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("1");
-
-		instructionList.addInstruction("newstring");
-		instructionList.addInstruction("611");
-		instructionList.addInstruction("dup");
-		instructionList.addInstruction("invokevirtual");
-		instructionList.addInstruction("toInt");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0");
-		instructionList.addInstruction("invokevirtual");
-		instructionList.addInstruction("toInt");
-		instructionList.addInstruction("syscall");
-		instructionList.addInstruction("0");
-
-		instructionList.addInstruction("return");
-
-		SvmMethod mainM = new SvmMethod("main:", new SvmField[] {}, new SvmField[] { new SvmField("arr", SvmType.POINTER),
-				new SvmField("strA", SvmType.POINTER), new SvmField("strB", SvmType.POINTER) }, SvmType.VOID, mainP);
-
-		int cP = instructionList.addInstruction("return");
-		SvmMethod c = new SvmMethod("_:", new SvmField[] {}, new SvmField[] {}, SvmType.VOID, cP);
-
-		SvmClass mainC = new SvmClass("Main", new SvmMethod[] { c }, new SvmField[] {}, new SvmMethod[] { mainM }, null);
-
-		return mainC;
+			String name = "";
+			SvmType type = null;
+			@SuppressWarnings("rawtypes")
+			Iterator fieldAttributesIterator = fieldElement.attributeIterator();
+			while (fieldAttributesIterator.hasNext()) {
+				Attribute attribute = (Attribute) fieldAttributesIterator.next();
+				if (attribute.getName().equals("name")) {
+					name = attribute.getValue();
+				} else if (attribute.getName().equals("type")) {
+					if (attribute.getValue().equals("Integer")) {
+						type = SvmType.INT;
+					} else {
+						type = SvmType.POINTER;
+					}
+				}
+			}
+			fields.add(new SvmField(name, type));
+		}
+		return fields;
 	}
 
 }
