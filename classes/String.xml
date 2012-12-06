@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="String">
+		<fields>
+			<field name="length" type="Integer" />
+			<field name="bytesCount" type="Integer" />
+		</fields>
+		<methods>
+			<method name="length:" type="Integer">
+				<instructions>
+					<instruction>getfield 0</instruction>
+					<instruction>ireturn</instruction>
+				</instructions>
+			</method>
+			<method name="append:String" type="String">
+				<arguments>
+					<argument name="s" type="String" />
+				</arguments>
+				<instructions>
+					<instruction>syscall 2</instruction>
+					<instruction>preturn</instruction>
+				</instructions>
+			</method>
+			<method name="append:Integer" type="String">
+				<arguments>
+					<argument name="i" type="Integer" />
+				</arguments>
+				<instructions>
+					<instruction>syscall 3</instruction>
+					<instruction>preturn</instruction>
+				</instructions>
+			</method>
+			<method name="toInteger:" type="Integer">
+				<instructions>
+					<instruction>syscall 5</instruction>
+					<instruction>ireturn</instruction>
+				</instructions>
+			</method>
+			<method name="split:" type="String">
+				<instructions>
+					<instruction>syscall 4</instruction>
+					<instruction>preturn</instruction>
+				</instructions>
+			</method>
+		</methods>
+	</class>
+</classes>

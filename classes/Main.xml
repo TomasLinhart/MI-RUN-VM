@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="Main">
+		<methods>
+			<method name="main:" type="void">
+				<locals>
+					<local name="arr" type="Array" />
+					<local name="sA" type="String" />
+					<local name="sB" type="String" />
+				</locals>
+				<instructions>
+					<instruction>ipush 101222</instruction>
+					<instruction>ipush 101222</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>newarray 5</instruction>
+					<instruction>pstore 1</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>arraylength</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>ipush 10</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>setfield 0</instruction>
+					<instruction>ipush 9</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>setfield 1</instruction>
+					<instruction>ipush 8</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>setfield 2</instruction>
+					<instruction>ipush 7</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>setfield 3</instruction>
+					<instruction>ipush 6</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>setfield 4</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 0</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 1</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 2</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 4</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 3</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>newstring #HELLO FROM STRING</instruction>
+					<instruction>pstore 3</instruction>
+					<instruction>pload 3</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>newstring # SECOND PART</instruction>
+					<instruction>pstore 2</instruction>
+					<instruction>pload 2</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>pload 2</instruction>
+					<instruction>pload 3</instruction>
+					<instruction>invokevirtual append:String</instruction>
+					<instruction>pstore 2</instruction>
+					<instruction>pload 2</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>ipush 76598</instruction>
+					<instruction>pload 2</instruction>
+					<instruction>invokevirtual append:Integer</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>newstring #A H O J</instruction>
+					<instruction>pstore 2</instruction>
+					<instruction>pload 2</instruction>
+					<instruction>invokevirtual split:</instruction>
+					<instruction>pstore 1</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 0</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 1</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 2</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>newstring 611</instruction>
+					<instruction>dup</instruction>
+					<instruction>invokevirtual toInteger:</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>invokevirtual toInteger:</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>return</instruction>
+				</instructions>
+			</method>
+		</methods>
+	</class>
+</classes>
