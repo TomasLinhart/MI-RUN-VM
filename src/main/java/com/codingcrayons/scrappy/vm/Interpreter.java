@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
 import com.codingcrayons.scrappy.vm.instruction.AddIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ArrayLengthInstruction;
-import com.codingcrayons.scrappy.vm.instruction.InvokevirtualInstruction;
 import com.codingcrayons.scrappy.vm.instruction.DivIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.DupInstruction;
 import com.codingcrayons.scrappy.vm.instruction.GetFieldInstruction;
@@ -18,6 +17,7 @@ import com.codingcrayons.scrappy.vm.instruction.IfIntNeqInstruction;
 import com.codingcrayons.scrappy.vm.instruction.IfPointerNotNullInstruction;
 import com.codingcrayons.scrappy.vm.instruction.IfPointerNullInstruction;
 import com.codingcrayons.scrappy.vm.instruction.Instruction;
+import com.codingcrayons.scrappy.vm.instruction.InvokevirtualInstruction;
 import com.codingcrayons.scrappy.vm.instruction.JumpInstruction;
 import com.codingcrayons.scrappy.vm.instruction.LoadIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.LoadPointerInstruction;
@@ -103,6 +103,8 @@ public class Interpreter {
 			} else {
 				args = sub.split(" ");
 			}
+		} else {
+			args = new String[] {};
 		}
 		instructionMap.get(instructionName).process(vm, args);
 	}

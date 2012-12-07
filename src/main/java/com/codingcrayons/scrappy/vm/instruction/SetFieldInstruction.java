@@ -11,12 +11,18 @@ public class SetFieldInstruction extends Instruction {
 
 	@Override
 	public void process(ScrappyVM vm, String[] params) throws ClassNotFoundException, StackOverflowException, StackException, PointerIsNullException {
-		int fieldIndex = Integer.parseInt(params[0]);
 		int objPointer = vm.stack.popPointer();
 
 		Utils.checkNullPointer(objPointer);
 
 		byte[] value = vm.stack.popValue();
+
+		int fieldIndex;
+		if (params.length > 0) {
+			fieldIndex = Integer.parseInt(params[0]);
+		} else {
+			fieldIndex = vm.stack.popInt();
+		}
 
 		Utils.setObjectFieldValue(vm.heap.getSpace(), objPointer, fieldIndex, value);
 	}

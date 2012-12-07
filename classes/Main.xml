@@ -14,14 +14,16 @@
 					<instruction>ipush 101222</instruction>
 					<instruction>ipush 101222</instruction>
 					<instruction>syscall 0</instruction>
-					<instruction>newarray 5</instruction>
+					<instruction>ipush 5</instruction>
+					<instruction>newarray</instruction>
 					<instruction>pstore 1</instruction>
 					<instruction>pload 1</instruction>
 					<instruction>arraylength</instruction>
 					<instruction>syscall 0</instruction>
+					<instruction>ipush 0</instruction>
 					<instruction>ipush 10</instruction>
 					<instruction>pload 1</instruction>
-					<instruction>setfield 0</instruction>
+					<instruction>setfield</instruction>
 					<instruction>ipush 9</instruction>
 					<instruction>pload 1</instruction>
 					<instruction>setfield 1</instruction>
@@ -34,8 +36,9 @@
 					<instruction>ipush 6</instruction>
 					<instruction>pload 1</instruction>
 					<instruction>setfield 4</instruction>
+					<instruction>ipush 0</instruction>
 					<instruction>pload 1</instruction>
-					<instruction>getfield 0</instruction>
+					<instruction>getfield</instruction>
 					<instruction>syscall 0</instruction>
 					<instruction>pload 1</instruction>
 					<instruction>getfield 1</instruction>
