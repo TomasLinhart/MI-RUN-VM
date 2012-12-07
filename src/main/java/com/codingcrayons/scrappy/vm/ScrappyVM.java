@@ -6,6 +6,7 @@ import org.dom4j.DocumentException;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
 import com.codingcrayons.scrappy.vm.instruction.InstructionList;
+import com.codingcrayons.scrappy.vm.io.IOHandle;
 import com.codingcrayons.scrappy.vm.permgen.PermGenSpace;
 import com.codingcrayons.scrappy.vm.stack.SvmStack;
 
@@ -17,6 +18,7 @@ public class ScrappyVM {
 	public PermGenSpace permGenSpace;
 	public SvmHeap heap;
 	public SvmStack stack;
+	public IOHandle ioHandle;
 
 	public ScrappyVM(int heapSize, int stackFramesCount, int stackFrameSize, String[] classFiles) throws ScrappyVmException, DocumentException {
 		logger.info("ScrappyVM starting");
@@ -25,6 +27,7 @@ public class ScrappyVM {
 		permGenSpace = new PermGenSpace(classFiles, instructionList);
 		stack = new SvmStack(stackFramesCount, stackFrameSize);
 		heap = new SvmHeap(heapSize, this);
+		ioHandle = new IOHandle();
 
 		init();
 		Interpreter.interpret(this);

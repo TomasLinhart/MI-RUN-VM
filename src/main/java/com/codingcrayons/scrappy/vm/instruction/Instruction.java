@@ -10,7 +10,7 @@ public abstract class Instruction {
 		if (i > 0) {
 			String sub = instruction.substring(i + 1);
 			if (sub.startsWith("#")) {
-				process(vm, new String[] { sub });
+				process(vm, new String[] { sub.substring(1) });
 			} else {
 				process(vm, sub.split(" "));
 			}

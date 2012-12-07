@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="FileReader">
+		<fields>
+			<field name="readerReference" type="Integer" />
+		</fields>
+		<methods>
+			<method name="open:" type="void">
+				<args>
+					<arg name="s" type="String" />
+				</args>
+				<instructions>
+					<instruction>pload 1</instruction>
+					<instruction>syscall 6</instruction>
+					<instruction>pload 0</instruction>
+					<instruction>setfield 0</instruction>
+					<instruction>return</instruction>
+				</instructions>
+			</method>
+			<method name="readLine:" type="String">
+				<instructions>
+					<instruction>getfield 0</instruction>
+					<instruction>syscall 11</instruction>
+					<instruction>preturn</instruction>
+				</instructions>
+			</method>
+			<method name="close:" type="void">
+				<instructions>
+					<instruction>getfield 0</instruction>
+					<instruction>syscall 8</instruction>
+					<instruction>return</instruction>
+				</instructions>
+			</method>
+		</methods>
+	</class>
+</classes>

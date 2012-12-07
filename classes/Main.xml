@@ -7,6 +7,8 @@
 					<local name="arr" type="Array" />
 					<local name="sA" type="String" />
 					<local name="sB" type="String" />
+					<local name="fr" type="FileReader" />
+					<local name="fw" type="FileWriter" />
 				</locals>
 				<instructions>
 					<instruction>ipush 101222</instruction>
@@ -85,6 +87,85 @@
 					<instruction>syscall 0</instruction>
 					<instruction>invokevirtual toInteger:</instruction>
 					<instruction>syscall 0</instruction>
+					
+					<instruction>new FileReader</instruction>
+					<instruction>istore 4</instruction>
+					<instruction>newstring #input/input.txt</instruction>
+					<instruction>iload 4</instruction>
+					<instruction>invokevirtual open:</instruction>
+					<instruction>iload 4</instruction>
+					<instruction>invokevirtual readLine:</instruction>
+					<instruction>istore 2</instruction>
+					<instruction>iload 4</instruction>
+					<instruction>invokevirtual close:</instruction>
+					<instruction>iload 2</instruction>
+					<instruction>syscall 1</instruction>
+
+					<instruction>new FileWriter</instruction>
+					<instruction>istore 5</instruction>
+					<instruction>newstring #input/output.txt</instruction>
+					<instruction>iload 5</instruction>
+					<instruction>invokevirtual open:</instruction>
+					<instruction>iload 2</instruction>
+					<instruction>syscall 1</instruction>
+					
+					<instruction>iload 2</instruction>
+					<instruction>newstring #RESULT: </instruction>
+					<instruction>invokevirtual append:String</instruction>
+					
+					<instruction>iload 5</instruction>
+					<instruction>invokevirtual writeLine:</instruction>
+					<instruction>iload 5</instruction>
+					<instruction>invokevirtual close:</instruction>
+					
+					<instruction>ipush 5</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>iand</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush -4</instruction>
+					<instruction>ipush 5</instruction>
+					<instruction>iand</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 5</instruction>
+					<instruction>ipush 2</instruction>
+					<instruction>iand</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 0</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>iand</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 5</instruction>
+					<instruction>ipush 2</instruction>
+					<instruction>ior</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 0</instruction>
+					<instruction>ipush 2</instruction>
+					<instruction>ior</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 0</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ior</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 0</instruction>
+					<instruction>ineg</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush -6</instruction>
+					<instruction>ineg</instruction>
+					<instruction>syscall 0</instruction>
+					
+					<instruction>ipush 5</instruction>
+					<instruction>ineg</instruction>
+					<instruction>syscall 0</instruction>
+					
+
 					<instruction>return</instruction>
 				</instructions>
 			</method>

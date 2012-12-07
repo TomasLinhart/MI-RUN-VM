@@ -66,4 +66,14 @@ public class Utils {
 		return pointer;
 	}
 
+	public static String getStringValue(ScrappyVM vm, int pointer) {
+		return new String(getStringBytes(vm, pointer));
+	}
+
+	public static byte[] getStringBytes(ScrappyVM vm, int pointer) {
+		int bc = Utils.byteArrayToInt(Utils.getObjectFieldValue(vm.heap.getSpace(), pointer, 1), 0);
+		int start = pointer + 3 * SvmType.TYPE_BYTE_SIZE;
+		return Utils.subArray(vm.heap.getSpace(), start, bc);
+	}
+
 }

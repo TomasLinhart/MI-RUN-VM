@@ -1,23 +1,29 @@
 package com.codingcrayons.scrappy.vm.syscalls;
 
+import java.io.IOException;
+import java.io.Writer;
+
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
-import com.codingcrayons.scrappy.vm.util.Utils;
 
-public class AppendIntToString implements Syscall {
-
-	private static String STRING_CLASS = "String";
+public class CloseFileWriter implements Syscall {
 
 	@Override
 	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException {
-		int pointer = vm.stack.getLocalPointer(0);
-		int intval = vm.stack.getLocalInt(1);
+		int writerIndex = vm.stack.popInt();
+		Writer w = vm.ioHandle.getWriter(writerIndex);
 
-		String res = new String(Utils.getStringBytes(vm, pointer)) + intval;
+		if (w == null) {
+			throw new RuntimeException("Writer not exists");
+		}
 
-		vm.stack.pushPointer(Utils.createSringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), res.getBytes(), res));
+		try {
+			w.close();
+		} catch (IOException e) {
+			throw new RuntimeException("Writer can not be closed");
+		}
 	}
 
 }
