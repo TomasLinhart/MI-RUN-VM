@@ -3,6 +3,7 @@ package com.codingcrayons.scrappy.vm;
 import java.util.HashMap;
 
 import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
+import com.codingcrayons.scrappy.vm.exceptions.UnknownInstructionException;
 import com.codingcrayons.scrappy.vm.instruction.AddIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ArrayLengthInstruction;
 import com.codingcrayons.scrappy.vm.instruction.DivIntInstruction;
@@ -29,6 +30,7 @@ import com.codingcrayons.scrappy.vm.instruction.MulIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.NewArrayInstruction;
 import com.codingcrayons.scrappy.vm.instruction.NewInstruction;
 import com.codingcrayons.scrappy.vm.instruction.NewStringInstruction;
+import com.codingcrayons.scrappy.vm.instruction.PopValueInstruction;
 import com.codingcrayons.scrappy.vm.instruction.PushIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.PushPointerInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ReturnInstruction;
@@ -45,7 +47,7 @@ public class Interpreter {
 	private static final HashMap<String, Instruction> instructionMap;
 
 	static {
-		instructionMap = new HashMap<String, Instruction>(35);
+		instructionMap = new HashMap<String, Instruction>(36);
 		instructionMap.put("ipush", new PushIntInstruction());
 		instructionMap.put("ppush", new PushPointerInstruction());
 		instructionMap.put("syscall", new SyscallInstruction());
@@ -81,6 +83,7 @@ public class Interpreter {
 		instructionMap.put("iand", new LogicalAndIntInstruction());
 		instructionMap.put("ior", new LogicalOrIntInstruction());
 		instructionMap.put("ineg", new LogicalNegIntInstruction());
+		instructionMap.put("popvalue", new PopValueInstruction());
 	}
 
 	public static void interpret(ScrappyVM vm) throws ScrappyVmException {
@@ -106,7 +109,11 @@ public class Interpreter {
 		} else {
 			args = new String[] {};
 		}
-		instructionMap.get(instructionName).process(vm, args);
+		Instruction instruction = instructionMap.get(instructionName);
+		if (instruction == null) {
+			throw new UnknownInstructionException(instructionLine);
+		}
+		instruction.process(vm, args);
 	}
 
 }

@@ -168,6 +168,10 @@
 					<instruction>ineg</instruction>
 					<instruction>syscall 0</instruction>
 					
+					<instruction>ipush 4</instruction>
+					<instruction>ipush 7</instruction>
+					<instruction>popvalue</instruction>
+					<instruction>syscall 0</instruction>
 
 					<instruction>return</instruction>
 				</instructions>
