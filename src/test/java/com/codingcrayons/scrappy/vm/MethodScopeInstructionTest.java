@@ -22,30 +22,55 @@ public class MethodScopeInstructionTest {
 	}
 
 	@DataProvider
-	public Integer[][] ifEqArgs() {
-		return new Integer[][] {
-				{ 4, 4, 2 },
-				{ 2, 4, 4 },
-				{ 0, 0, 2 },
-				{ -1, 3, 4 }
+	public Object[][] ifArgs() {
+		return new Object[][] {
+				{ "ifeq", 4, 4, 2 },
+				{ "ifeq", 2, 4, 4 },
+				{ "ifeq", -1, 3, 4 },
+				{ "ifneq", 4, 4, 4 },
+				{ "ifneq", 2, 4, 2 },
+				{ "ifneq", -1, 3, 2 },
+				{ "ifge", 4, 4, 2 },
+				{ "ifge", 2, 4, 4 },
+				{ "ifge", 0, -1, 2 },
+				{ "ifgt", 4, 4, 4 },
+				{ "ifgt", 2, 4, 4 },
+				{ "ifgt", 3, 1, 2 },
+				{ "ifle", 4, 4, 2 },
+				{ "ifle", 2, 4, 2 },
+				{ "ifle", 3, 1, 4 },
+				{ "iflt", 4, 4, 4 },
+				{ "iflt", 2, 4, 2 },
+				{ "iflt", 3, 1, 4 }
 		};
+	}
+
+	@Test(dataProvider = "ifArgs")
+	public void testIfEqInstruction(String inst, int a, int b, int pc) throws ScrappyVmException {
+		vm.stack.pushInt(a);
+		vm.stack.pushInt(b);
+		vm.instructionList.addInstruction(inst + " 3"); // 1
+		vm.instructionList.addInstruction(null); // 2 if true
+		vm.instructionList.addInstruction(null); // 3
+		vm.instructionList.addInstruction(null); // 4 if false
+		Interpreter.interpret(vm);
+		assertEquals(vm.instructionList.getPc(), pc);
 	}
 
 	@DataProvider
-	public Integer[][] ifNeqArgs() {
-		return new Integer[][] {
-				{ 4, 4, 4 },
-				{ 2, 4, 2 },
-				{ 0, 0, 4 },
-				{ -1, 3, 2 }
+	public Object[][] ifPNullArgs() {
+		return new Object[][] {
+				{ "ifnull", 0, 2 },
+				{ "ifnull", 1, 4 },
+				{ "ifnotnull", 0, 4 },
+				{ "ifnotnull", 1, 2 }
 		};
 	}
 
-	@Test(dataProvider = "ifEqArgs")
-	public void testIfEqInstruction(int a, int b, int pc) throws ScrappyVmException {
-		vm.stack.pushInt(a);
-		vm.stack.pushInt(b);
-		vm.instructionList.addInstruction("ifeq 3"); // 1
+	@Test(dataProvider = "ifPNullArgs")
+	public void testIfPNullInstruction(String inst, int p, int pc) throws ScrappyVmException {
+		vm.stack.pushPointer(p);
+		vm.instructionList.addInstruction(inst + " 3"); // 1
 		vm.instructionList.addInstruction(null); // 2 if true
 		vm.instructionList.addInstruction(null); // 3
 		vm.instructionList.addInstruction(null); // 4 if false
@@ -53,15 +78,33 @@ public class MethodScopeInstructionTest {
 		assertEquals(vm.instructionList.getPc(), pc);
 	}
 
-	@Test(dataProvider = "ifNeqArgs")
-	public void testIfNeqInstruction(int a, int b, int pc) throws ScrappyVmException {
+	@DataProvider
+	public Object[][] iMathArgs() {
+		return new Object[][] {
+				{ "iadd", 4, 5, 9 },
+				{ "iadd", -1, -2, -3 },
+				{ "isub", 4, 5, -1 },
+				{ "isub", -1, -2, 1 },
+				{ "imul", 4, 5, 20 },
+				{ "imul", -10, -2, 20 },
+				{ "imul", 3, -2, -6 },
+				{ "idiv", 10, 5, 2 },
+				{ "idiv", -10, -2, 5 },
+				{ "idiv", 10, -5, -2 },
+				{ "idiv", 10, 3, 3 },
+				{ "imod", 10, 5, 0 },
+				{ "imod", 10, 3, 1 },
+		};
+	}
+
+	@Test(dataProvider = "iMathArgs")
+	public void testIMathnstruction(String inst, int a, int b, int res) throws ScrappyVmException {
 		vm.stack.pushInt(a);
 		vm.stack.pushInt(b);
-		vm.instructionList.addInstruction("ifneq 3"); // 1
-		vm.instructionList.addInstruction(null); // 2 if true
-		vm.instructionList.addInstruction(null); // 3
-		vm.instructionList.addInstruction(null); // 4 if false
+		vm.instructionList.addInstruction(inst);
+		vm.instructionList.addInstruction(null);
 		Interpreter.interpret(vm);
-		assertEquals(vm.instructionList.getPc(), pc);
+		assertEquals(vm.stack.popInt(), res);
 	}
+
 }
