@@ -22,7 +22,7 @@ public class MethodScopeInstructionTest {
 	}
 
 	@DataProvider
-	public Integer[][] ifArgs() {
+	public Integer[][] ifEqArgs() {
 		return new Integer[][] {
 				{ 4, 4, 2 },
 				{ 2, 4, 4 },
@@ -31,11 +31,33 @@ public class MethodScopeInstructionTest {
 		};
 	}
 
-	@Test(dataProvider = "ifArgs")
+	@DataProvider
+	public Integer[][] ifNeqArgs() {
+		return new Integer[][] {
+				{ 4, 4, 4 },
+				{ 2, 4, 2 },
+				{ 0, 0, 4 },
+				{ -1, 3, 2 }
+		};
+	}
+
+	@Test(dataProvider = "ifEqArgs")
 	public void testIfEqInstruction(int a, int b, int pc) throws ScrappyVmException {
 		vm.stack.pushInt(a);
 		vm.stack.pushInt(b);
 		vm.instructionList.addInstruction("ifeq 3"); // 1
+		vm.instructionList.addInstruction(null); // 2 if true
+		vm.instructionList.addInstruction(null); // 3
+		vm.instructionList.addInstruction(null); // 4 if false
+		Interpreter.interpret(vm);
+		assertEquals(vm.instructionList.getPc(), pc);
+	}
+
+	@Test(dataProvider = "ifNeqArgs")
+	public void testIfNeqInstruction(int a, int b, int pc) throws ScrappyVmException {
+		vm.stack.pushInt(a);
+		vm.stack.pushInt(b);
+		vm.instructionList.addInstruction("ifneq 3"); // 1
 		vm.instructionList.addInstruction(null); // 2 if true
 		vm.instructionList.addInstruction(null); // 3
 		vm.instructionList.addInstruction(null); // 4 if false
