@@ -12,7 +12,7 @@ public class IfPointerNotNullInstruction extends Instruction {
 		int pointer = vm.stack.popInt();
 
 		if (pointer == 0) {
-			vm.instructionList.jump(vm.instructionList.getPc() + offset);
+			vm.instructionList.jump(vm.instructionList.getPc() + offset - 1);
 		}
 	}
 

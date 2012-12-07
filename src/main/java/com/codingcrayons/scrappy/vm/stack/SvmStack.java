@@ -33,12 +33,7 @@ public class SvmStack {
 			pushInt(objPointer);
 
 			// 1 - n (args + other locals)
-			for (int i = 0; i < method.arguments.length + method.locals.length; i++) {
-				// fill all to 0
-				for (int j = 0; j < SvmType.TYPE_BYTE_SIZE; j++) {
-					stackSpace[next++] = 0;
-				}
-			}
+			next += (method.arguments.length + method.locals.length) * SvmType.TYPE_BYTE_SIZE;
 
 			// current frame is the caller frame
 			for (int i = method.arguments.length - 1; i >= 0; i--) {

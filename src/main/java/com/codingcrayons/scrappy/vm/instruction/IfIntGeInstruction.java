@@ -13,7 +13,7 @@ public class IfIntGeInstruction extends Instruction {
 		int v2 = vm.stack.popInt();
 
 		if (v2 < v1) {
-			vm.instructionList.jump(vm.instructionList.getPc() + offset);
+			vm.instructionList.jump(vm.instructionList.getPc() + offset - 1);
 		}
 	}
 

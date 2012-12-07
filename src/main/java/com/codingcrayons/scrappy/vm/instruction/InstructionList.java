@@ -19,7 +19,7 @@ public class InstructionList {
 
 	public InstructionList() {
 		instructions = new ArrayList<String>();
-		pc = -1;
+		pc = 0;
 		ic = 0;
 	}
 
@@ -29,11 +29,11 @@ public class InstructionList {
 	}
 
 	public String nextInstruction() {
-		return instructions.get(++pc);
+		return instructions.get(pc++);
 	}
 
 	public void jump(int address) {
-		pc = address - 1;
+		pc = address;
 	}
 
 	public int getPc() {

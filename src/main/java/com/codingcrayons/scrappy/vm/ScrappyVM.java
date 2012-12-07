@@ -28,7 +28,9 @@ public class ScrappyVM {
 		stack = new SvmStack(stackFramesCount, stackFrameSize);
 		heap = new SvmHeap(heapSize, this);
 		ioHandle = new IOHandle();
+	}
 
+	public void start() throws ScrappyVmException {
 		init();
 		Interpreter.interpret(this);
 	}
@@ -63,7 +65,8 @@ public class ScrappyVM {
 			files[i] = args[i + 3];
 		}
 
-		new ScrappyVM(heapSize, stackFramesCount, stackFrameSize, files);
+		(new ScrappyVM(heapSize, stackFramesCount, stackFrameSize, files)).start();
+
 	}
 
 	private static int parseInt(String s, int value) {

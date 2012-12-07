@@ -31,7 +31,8 @@ public class InvokevirtualInstruction extends Instruction {
 			throw new MethodNotFoundException(clazz.name, methodName);
 		}
 
-		vm.stack.beginStackFrame(vm.instructionList.getPc() + 1, objPointer, method);
+		// pc is set to next instruction
+		vm.stack.beginStackFrame(vm.instructionList.getPc(), objPointer, method);
 
 		vm.instructionList.jump(method.instructionPointer);
 	}

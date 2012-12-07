@@ -9,7 +9,7 @@ public class JumpInstruction extends Instruction {
 	@Override
 	public void process(ScrappyVM vm, String[] params) throws StackOverflowException, StackException {
 		int offset = Integer.parseInt(params[0]);
-		vm.instructionList.jump(vm.instructionList.getPc() + offset);
+		vm.instructionList.jump(vm.instructionList.getPc() + offset - 1);
 	}
 
 }
