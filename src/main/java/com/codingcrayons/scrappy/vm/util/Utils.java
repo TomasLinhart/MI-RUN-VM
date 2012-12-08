@@ -1,6 +1,7 @@
 package com.codingcrayons.scrappy.vm.util;
 
 import com.codingcrayons.scrappy.vm.ScrappyVM;
+import com.codingcrayons.scrappy.vm.SvmHeap;
 import com.codingcrayons.scrappy.vm.exceptions.PointerIsNullException;
 import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
@@ -24,8 +25,8 @@ public class Utils {
 	}
 
 	public static byte[] getObjectFieldValue(byte[] bytes, int objectStart, int index) {
-		byte[] value = new byte[SvmType.TYPE_BYTE_SIZE];
-		int start = index * SvmType.TYPE_BYTE_SIZE + objectStart + SvmType.TYPE_BYTE_SIZE;
+		byte[] value = new byte[SvmType.STORED_TYPE_BYTE_SIZE];
+		int start = index * SvmType.STORED_TYPE_BYTE_SIZE + objectStart + SvmHeap.OBJECT_HEADER_BYTES;
 
 		for (int i = 0; i < value.length; i++) {
 			value[i] = bytes[start + i];
@@ -35,7 +36,7 @@ public class Utils {
 	}
 
 	public static byte[] getValue(byte[] bytes, int from) {
-		byte[] value = new byte[SvmType.TYPE_BYTE_SIZE];
+		byte[] value = new byte[SvmType.STORED_TYPE_BYTE_SIZE];
 
 		for (int i = 0; i < value.length; i++) {
 			value[i] = bytes[from + i];
@@ -45,7 +46,7 @@ public class Utils {
 	}
 
 	public static void setObjectFieldValue(byte[] bytes, int objectStart, int index, byte[] value) {
-		int start = index * SvmType.TYPE_BYTE_SIZE + objectStart + SvmType.TYPE_BYTE_SIZE;
+		int start = index * SvmType.STORED_TYPE_BYTE_SIZE + objectStart + SvmHeap.OBJECT_HEADER_BYTES;
 		for (int i = 0; i < value.length; i++) {
 			bytes[start + i] = value[i];
 		}
@@ -72,7 +73,7 @@ public class Utils {
 
 	public static byte[] getStringBytes(ScrappyVM vm, int pointer) {
 		int bc = Utils.byteArrayToInt(Utils.getObjectFieldValue(vm.heap.getSpace(), pointer, 1), 0);
-		int start = pointer + 3 * SvmType.TYPE_BYTE_SIZE;
+		int start = pointer + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE;
 		return Utils.subArray(vm.heap.getSpace(), start, bc);
 	}
 

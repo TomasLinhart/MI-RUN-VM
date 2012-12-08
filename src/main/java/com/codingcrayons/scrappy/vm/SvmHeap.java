@@ -2,6 +2,7 @@ package com.codingcrayons.scrappy.vm;
 
 import org.apache.log4j.Logger;
 
+import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
 import com.codingcrayons.scrappy.vm.util.Utils;
@@ -9,6 +10,8 @@ import com.codingcrayons.scrappy.vm.util.Utils;
 public class SvmHeap {
 
 	private static final Logger logger = Logger.getLogger(SvmHeap.class);
+
+	public static final int OBJECT_HEADER_BYTES = 8;
 
 	private final byte[] space;
 	private int next;
@@ -27,19 +30,23 @@ public class SvmHeap {
 		int start = next;
 
 		insertIntToHeap(clazz.address);
-		int fieldsSize = clazz.fields.length * SvmType.TYPE_BYTE_SIZE;
+		insertIntToHeap(0); // array size not set
+		int fieldsSize = clazz.fields.length * SvmType.STORED_TYPE_BYTE_SIZE;
+		// initialize fields to default value
 		for (; fieldsSize > 0; fieldsSize--) {
 			space[next++] = 0;
 		}
 		return start;
 	}
 
-	public int allocArray(int size) {
+	public int allocArray(int size) throws ClassNotFoundException {
 		int start = next;
 
-		insertIntToHeap(size);
+		insertIntToHeap(vm.permGenSpace.getClass("Array").address);
+		insertIntToHeap(size); // array size
 
-		int fieldsSize = size * SvmType.TYPE_BYTE_SIZE;
+		int fieldsSize = size * SvmType.STORED_TYPE_BYTE_SIZE;
+		// initialize fields to default value
 		for (; fieldsSize > 0; fieldsSize--) {
 			space[next++] = 0;
 		}

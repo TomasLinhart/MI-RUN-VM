@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="Array">
+		<methods>
+			<method name="size:" type="Integer">
+				<instructions>
+					<instruction>iload 0</instruction>
+					<instruction>syscall 12</instruction>
+					<instruction>ireturn</instruction>
+				</instructions>
+			</method>
+		</methods>
+	</class>
+</classes>

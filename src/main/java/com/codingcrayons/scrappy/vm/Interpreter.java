@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
 import com.codingcrayons.scrappy.vm.exceptions.UnknownInstructionException;
 import com.codingcrayons.scrappy.vm.instruction.AddIntInstruction;
-import com.codingcrayons.scrappy.vm.instruction.ArrayLengthInstruction;
 import com.codingcrayons.scrappy.vm.instruction.DivIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.DupInstruction;
 import com.codingcrayons.scrappy.vm.instruction.GetFieldInstruction;
@@ -47,7 +46,7 @@ public class Interpreter {
 	private static final HashMap<String, Instruction> instructionMap;
 
 	static {
-		instructionMap = new HashMap<String, Instruction>(36);
+		instructionMap = new HashMap<String, Instruction>(35);
 		instructionMap.put("ipush", new PushIntInstruction());
 		instructionMap.put("ppush", new PushPointerInstruction());
 		instructionMap.put("syscall", new SyscallInstruction());
@@ -77,7 +76,6 @@ public class Interpreter {
 		instructionMap.put("istore", new StoreIntInstruction());
 		instructionMap.put("pstore", new StorePointerInstruction());
 		instructionMap.put("jump", new JumpInstruction());
-		instructionMap.put("arraylength", new ArrayLengthInstruction());
 		instructionMap.put("newstring", new NewStringInstruction());
 		instructionMap.put("dup", new DupInstruction());
 		instructionMap.put("iand", new LogicalAndIntInstruction());

@@ -1,6 +1,7 @@
 package com.codingcrayons.scrappy.vm.syscalls;
 
 import com.codingcrayons.scrappy.vm.ScrappyVM;
+import com.codingcrayons.scrappy.vm.SvmHeap;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
@@ -23,13 +24,13 @@ public class AppendString implements Syscall {
 
 		int i;
 		// class ref + string length + bytes count
-		int start = pointerA + 3 * SvmType.TYPE_BYTE_SIZE;
+		int start = pointerA + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE;
 		for (i = 0; i < bcA; i++) {
 			bytes[i] = vm.heap.getSpace()[start + i];
 		}
 
 		// class ref + string length + bytes count
-		start = pointerB + 3 * SvmType.TYPE_BYTE_SIZE;
+		start = pointerB + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE;
 		for (i = 0; i < bcB; i++) {
 			bytes[bcA + i] = vm.heap.getSpace()[start + i];
 		}

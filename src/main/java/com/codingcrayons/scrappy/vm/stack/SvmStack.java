@@ -33,7 +33,7 @@ public class SvmStack {
 			pushInt(objPointer);
 
 			// 1 - n (args + other locals)
-			next += (method.arguments.length + method.locals.length) * SvmType.TYPE_BYTE_SIZE;
+			next += (method.arguments.length + method.locals.length) * SvmType.STORED_TYPE_BYTE_SIZE;
 
 			// current frame is the caller frame
 			for (int i = method.arguments.length - 1; i >= 0; i--) {
@@ -58,12 +58,18 @@ public class SvmStack {
 			}
 		}
 
+		public void push(byte b) throws StackOverflowException {
+			push(new byte[] { b });
+		}
+
 		public void pushInt(int value) throws StackOverflowException {
 			push(Utils.intToByteArray(value));
+			push(SvmType.INT.getIdentByte());
 		}
 
 		public void pushPointer(int pointer) throws StackOverflowException {
-			pushInt(pointer);
+			push(Utils.intToByteArray(pointer));
+			push(SvmType.POINTER.getIdentByte());
 		}
 
 		public int popInt() throws StackException {
@@ -79,31 +85,37 @@ public class SvmStack {
 		}
 
 		public byte[] getLocalValue(int index) {
-			return Utils.subArray(stackSpace, index * SvmType.TYPE_BYTE_SIZE + SvmType.TYPE_BYTE_SIZE, SvmType.TYPE_BYTE_SIZE);
+			return Utils.subArray(stackSpace, index * SvmType.STORED_TYPE_BYTE_SIZE + SvmType.STORED_TYPE_BYTE_SIZE, SvmType.STORED_TYPE_BYTE_SIZE);
 		}
 
 		public int getLocalInt(int index) {
-			return Utils.byteArrayToInt(stackSpace, index * SvmType.TYPE_BYTE_SIZE + SvmType.TYPE_BYTE_SIZE);
+			return Utils.byteArrayToInt(stackSpace, index * SvmType.STORED_TYPE_BYTE_SIZE + SvmType.STORED_TYPE_BYTE_SIZE);
 		}
 
 		public int getLocalPointer(int index) {
 			return getLocalInt(index);
 		}
 
-		public void setLocalInt(int index, int value) {
+		private void setLocal(int index, int value, byte type) {
 			byte[] bytes = Utils.intToByteArray(value);
-			int valueStart = index * SvmType.TYPE_BYTE_SIZE + SvmType.TYPE_BYTE_SIZE;
-			for (int i = 0; i < SvmType.TYPE_BYTE_SIZE; i++) {
+			int valueStart = index * SvmType.STORED_TYPE_BYTE_SIZE + SvmType.STORED_TYPE_BYTE_SIZE;
+			int i;
+			for (i = 0; i < SvmType.TYPE_BYTE_SIZE; i++) {
 				stackSpace[i + valueStart] = bytes[i];
 			}
+			stackSpace[i + valueStart] = type;
+		}
+
+		public void setLocalInt(int index, int value) {
+			setLocal(index, value, SvmType.INT.getIdentByte());
 		}
 
 		public void setLocalPointer(int index, int pointer) {
-			setLocalInt(index, pointer);
+			setLocal(index, pointer, SvmType.POINTER.getIdentByte());
 		}
 
 		public byte[] popValue() throws StackException {
-			next -= SvmType.TYPE_BYTE_SIZE;
+			next -= SvmType.STORED_TYPE_BYTE_SIZE;
 			if (next < 0) {
 				throw new StackException("Stack Boundary Exceeded");
 			}

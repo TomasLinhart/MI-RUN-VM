@@ -5,7 +5,7 @@ public class SyscallSet {
 	public static Syscall[] syscalls;
 
 	static {
-		syscalls = new Syscall[12];
+		syscalls = new Syscall[13];
 		syscalls[0] = new PrintInt();
 		syscalls[1] = new PrintString();
 		syscalls[2] = new AppendString();
@@ -18,6 +18,7 @@ public class SyscallSet {
 		syscalls[9] = new CloseFileWriter();
 		syscalls[10] = new WriteLine();
 		syscalls[11] = new ReadLine();
+		syscalls[12] = new ArraySize();
 	}
 
 	public static Syscall get(int index) {
