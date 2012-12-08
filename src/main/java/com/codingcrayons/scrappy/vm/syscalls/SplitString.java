@@ -25,7 +25,7 @@ public class SplitString implements Syscall {
 
 		for (int i = 0; i < splitted.length; i++) {
 			int partPointer = Utils.createSringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), splitted[i].getBytes(), splitted[i]);
-			Utils.setObjectFieldValue(vm.heap.getSpace(), arrPointer, i, Utils.intToByteArray(partPointer));
+			Utils.setObjectFieldPointerValue(vm.heap.getSpace(), arrPointer, i, partPointer);
 		}
 
 		vm.stack.pushPointer(arrPointer);

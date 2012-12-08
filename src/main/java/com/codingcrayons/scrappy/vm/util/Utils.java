@@ -52,6 +52,24 @@ public class Utils {
 		}
 	}
 
+	private static void setObjectFieldValueByType(byte[] bytes, int objectStart, int index, int value, byte type) {
+		int start = index * SvmType.STORED_TYPE_BYTE_SIZE + objectStart + SvmHeap.OBJECT_HEADER_BYTES;
+		byte[] bv = Utils.intToByteArray(value);
+		int i;
+		for (i = 0; i < bv.length; i++) {
+			bytes[start + i] = bv[i];
+		}
+		bytes[start + i] = type;
+	}
+
+	public static void setObjectFieldIntValue(byte[] bytes, int objectStart, int index, int value) {
+		Utils.setObjectFieldValueByType(bytes, objectStart, index, value, SvmType.INT.getIdentByte());
+	}
+
+	public static void setObjectFieldPointerValue(byte[] bytes, int objectStart, int index, int value) {
+		Utils.setObjectFieldValueByType(bytes, objectStart, index, value, SvmType.POINTER.getIdentByte());
+	}
+
 	public static void checkNullPointer(int pointer) throws PointerIsNullException {
 		if (pointer == 0) {
 			throw new PointerIsNullException();
@@ -61,8 +79,8 @@ public class Utils {
 	public static int createSringOnHeap(ScrappyVM vm, SvmClass clazz, byte[] bytes, String value) {
 		int pointer = vm.heap.allocByteClass(clazz, bytes);
 
-		Utils.setObjectFieldValue(vm.heap.getSpace(), pointer, 0, Utils.intToByteArray(value.length()));
-		Utils.setObjectFieldValue(vm.heap.getSpace(), pointer, 1, Utils.intToByteArray(bytes.length));
+		Utils.setObjectFieldIntValue(vm.heap.getSpace(), pointer, 0, value.length());
+		Utils.setObjectFieldIntValue(vm.heap.getSpace(), pointer, 1, bytes.length);
 
 		return pointer;
 	}
