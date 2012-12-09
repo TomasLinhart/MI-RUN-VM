@@ -16,7 +16,10 @@ public class PermGenSpace {
 	private int counter;
 
 	public PermGenSpace(String[] classFiles, InstructionList instructionList) throws DocumentException {
-		List<SvmClass> loadedClasses = ClassLoader.load(classFiles, instructionList);
+		// load libraries
+		String[] libs = new String[] { "classes/Array.xml", "classes/FileReader.xml", "classes/FileWriter.xml", "classes/String.xml"};
+		List<SvmClass> loadedClasses = ClassLoader.load( libs, instructionList);
+		loadedClasses.addAll(ClassLoader.load(classFiles, instructionList));
 
 		classTable = new HashMap<String, Integer>(loadedClasses.size());
 		classes = new ArrayList<SvmClass>(loadedClasses.size() + 5);

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="Test">
+		<fields>
+			<field name="A" type="Integer" />
+			<field name="B" type="String" />
+		</fields>
+	</class>
+</classes>

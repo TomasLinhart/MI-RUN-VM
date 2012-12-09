@@ -48,15 +48,16 @@ public class MethodScopeInstructionTest {
 	}
 
 	@Test(dataProvider = "ifArgs")
-	public void testIfEqInstruction(String inst, int a, int b, int pc) throws ScrappyVmException {
+	public void testIfInstruction(String inst, int a, int b, int pc) throws ScrappyVmException {
 		vm.stack.pushInt(a);
 		vm.stack.pushInt(b);
-		vm.instructionList.addInstruction(inst + " 3"); // 1
+		int is = vm.instructionList.addInstruction(inst + " 3"); // 1
 		vm.instructionList.addInstruction(null); // 2 if true
 		vm.instructionList.addInstruction(null); // 3
 		vm.instructionList.addInstruction(null); // 4 if false
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
-		assertEquals(vm.instructionList.getPc(), pc);
+		assertEquals(vm.instructionList.getPc(), is + pc);
 	}
 
 	@DataProvider
@@ -72,12 +73,13 @@ public class MethodScopeInstructionTest {
 	@Test(dataProvider = "ifPNullArgs")
 	public void testIfPNullInstruction(String inst, int p, int pc) throws ScrappyVmException {
 		vm.stack.pushPointer(p);
-		vm.instructionList.addInstruction(inst + " 3"); // 1
+		int is = vm.instructionList.addInstruction(inst + " 3"); // 1
 		vm.instructionList.addInstruction(null); // 2 if true
 		vm.instructionList.addInstruction(null); // 3
 		vm.instructionList.addInstruction(null); // 4 if false
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
-		assertEquals(vm.instructionList.getPc(), pc);
+		assertEquals(vm.instructionList.getPc(), is + pc);
 	}
 
 	@DataProvider
@@ -103,8 +105,9 @@ public class MethodScopeInstructionTest {
 	public void testMathInstruction(String inst, int a, int b, int res) throws ScrappyVmException {
 		vm.stack.pushInt(a);
 		vm.stack.pushInt(b);
-		vm.instructionList.addInstruction(inst);
+		int is = vm.instructionList.addInstruction(inst);
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), res);
 	}
@@ -112,8 +115,9 @@ public class MethodScopeInstructionTest {
 	@Test
 	public void testDupInstruction() throws ScrappyVmException {
 		vm.stack.pushInt(100);
-		vm.instructionList.addInstruction("dup");
+		int is = vm.instructionList.addInstruction("dup");
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), 100);
 		assertEquals(vm.stack.popInt(), 100);
@@ -122,8 +126,8 @@ public class MethodScopeInstructionTest {
 	@DataProvider
 	public Object[][] jumpArgs() {
 		return new Object[][] {
-				{ 5, 10, 2, 6, 10 },
-				{ 5, 10, -2, 2, 5 },
+				{ 5, 10, 2, 4, 10 },
+				{ 5, 10, -2, 0, 5 },
 		};
 	}
 
@@ -131,14 +135,14 @@ public class MethodScopeInstructionTest {
 	public void testJumpInstruction(int a, int b, int offset, int pcEnd, int expectedStackValue) throws ScrappyVmException {
 		vm.instructionList.addInstruction("ipush " + a);
 		vm.instructionList.addInstruction(null);
-		vm.instructionList.addInstruction("jump " + offset);
+		int is = vm.instructionList.addInstruction("jump " + offset);
 		vm.instructionList.addInstruction(null);
 		vm.instructionList.addInstruction("ipush " + b);
 		vm.instructionList.addInstruction(null);
-		vm.instructionList.jump(2); // jump instruction
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), expectedStackValue);
-		assertEquals(vm.instructionList.getPc(), pcEnd);
+		assertEquals(vm.instructionList.getPc(), is + pcEnd);
 	}
 
 	@DataProvider
@@ -163,8 +167,9 @@ public class MethodScopeInstructionTest {
 	public void testLogicalOpsInstruction(String inst, int a, int b, int res) throws ScrappyVmException {
 		vm.stack.pushInt(a);
 		vm.stack.pushInt(b);
-		vm.instructionList.addInstruction(inst);
+		int is = vm.instructionList.addInstruction(inst);
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), res);
 	}
@@ -181,8 +186,9 @@ public class MethodScopeInstructionTest {
 	@Test(dataProvider = "logNegArgs")
 	public void testLogicalNegInstruction(int a, int res) throws ScrappyVmException {
 		vm.stack.pushInt(a);
-		vm.instructionList.addInstruction("ineg");
+		int is = vm.instructionList.addInstruction("ineg");
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), res);
 	}
@@ -191,8 +197,9 @@ public class MethodScopeInstructionTest {
 	public void testPopValue() throws ScrappyVmException {
 		vm.stack.pushInt(10);
 		vm.stack.pushInt(5);
-		vm.instructionList.addInstruction("popvalue");
+		int is = vm.instructionList.addInstruction("popvalue");
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 		assertEquals(vm.stack.popInt(), 10);
 	}
@@ -209,8 +216,9 @@ public class MethodScopeInstructionTest {
 	public void testPushInstruction(String inst, byte type) throws ScrappyVmException {
 		int push = 10;
 
-		vm.instructionList.addInstruction(inst + " " + push);
+		int is = vm.instructionList.addInstruction(inst + " " + push);
 		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
 		byte[] pop = vm.stack.popValue();

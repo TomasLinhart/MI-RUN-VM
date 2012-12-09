@@ -20,7 +20,7 @@ public class HeapRelatedInstructionTest {
 
 	@BeforeMethod
 	public void setup() throws ScrappyVmException, DocumentException {
-		vm = new ScrappyVM(100, 1, 100, new String[] { "test-classes/Test.xml", "classes/Array.xml", "classes/String.xml" });
+		vm = new ScrappyVM(100, 1, 100, new String[] { "test-classes/Test.xml" });
 	}
 
 	@Test
@@ -36,7 +36,7 @@ public class HeapRelatedInstructionTest {
 		assertEquals(vm.stack.popPointer(), start); // object pointer on heap
 
 		// class ref to permgen
-		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), 1), 0);
+		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), 1), 4); // 4 libs
 
 		// 8 header + 5 * num of fields
 		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + 5 * 2);
