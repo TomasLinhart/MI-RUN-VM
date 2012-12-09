@@ -210,4 +210,8 @@ public class SvmStack {
 		return stackFrames[csfIndex];
 	}
 
+	public int getCurrentStackFrameIndex() {
+		return csfIndex;
+	}
+
 }

@@ -10,7 +10,7 @@ public class ReturnPointerInstruction extends Instruction {
 	public void process(ScrappyVM vm, String[] params) throws StackException, StackOverflowException {
 		int returnValue = vm.stack.popInt();
 		int address = vm.stack.discardStackFrame();
-		vm.stack.pushInt(returnValue);
+		vm.stack.pushPointer(returnValue);
 
 		vm.instructionList.jump(address);
 	}

@@ -19,10 +19,9 @@ public class SvmHeap {
 
 	public SvmHeap(int size, ScrappyVM vm) {
 		logger.info("Heap of " + size + " bytes ready");
-
 		space = new byte[size];
 		next = 0;
-		space[next++] = 0; // null pointer location
+		space[next++] = 0; // null pointer
 		this.vm = vm;
 	}
 
@@ -79,4 +78,7 @@ public class SvmHeap {
 		return space;
 	}
 
+	public int getNext() {
+		return next;
+	}
 }
