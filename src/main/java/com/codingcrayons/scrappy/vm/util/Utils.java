@@ -2,6 +2,7 @@ package com.codingcrayons.scrappy.vm.util;
 
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.SvmHeap;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.PointerIsNullException;
 import com.codingcrayons.scrappy.vm.permgen.SvmClass;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
@@ -76,7 +77,7 @@ public class Utils {
 		}
 	}
 
-	public static int createSringOnHeap(ScrappyVM vm, SvmClass clazz, byte[] bytes, String value) {
+	public static int createSringOnHeap(ScrappyVM vm, SvmClass clazz, byte[] bytes, String value) throws HeapOutOfMemoryException {
 		int pointer = vm.heap.allocByteClass(clazz, bytes);
 
 		Utils.setObjectFieldIntValue(vm.heap.getSpace(), pointer, 0, value.length());

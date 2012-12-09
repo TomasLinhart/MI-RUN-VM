@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.util.Utils;
@@ -14,7 +15,7 @@ public class ReadLine implements Syscall {
 	private static String STRING_CLASS = "String";
 
 	@Override
-	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException {
+	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException, HeapOutOfMemoryException {
 		int readerIndex = vm.stack.popInt();
 		BufferedReader r = vm.ioHandle.getReader(readerIndex);
 

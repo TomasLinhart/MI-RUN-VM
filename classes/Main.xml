@@ -79,6 +79,9 @@
 					<instruction>invokevirtual split:</instruction>
 					<instruction>pstore 1</instruction>
 					<instruction>pload 1</instruction>
+					<instruction>invokevirtual size:</instruction>
+					<instruction>syscall 0</instruction>
+					<instruction>pload 1</instruction>
 					<instruction>getfield 0</instruction>
 					<instruction>syscall 1</instruction>
 					<instruction>pload 1</instruction>
@@ -86,6 +89,9 @@
 					<instruction>syscall 1</instruction>
 					<instruction>pload 1</instruction>
 					<instruction>getfield 2</instruction>
+					<instruction>syscall 1</instruction>
+					<instruction>pload 1</instruction>
+					<instruction>getfield 3</instruction>
 					<instruction>syscall 1</instruction>
 					<instruction>newstring 611</instruction>
 					<instruction>dup</instruction>

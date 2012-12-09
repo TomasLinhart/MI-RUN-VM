@@ -11,7 +11,7 @@ import com.codingcrayons.scrappy.vm.util.Utils;
 
 public class SvmStack {
 
-	private static class StackFrame {
+	public static class StackFrame {
 
 		private final byte[] stackSpace;
 		private int next;
@@ -122,6 +122,14 @@ public class SvmStack {
 			return Utils.getValue(stackSpace, next);
 		}
 
+		public int getNext() {
+			return next;
+		}
+
+		public byte[] getStackSpace() {
+			return stackSpace;
+		}
+
 	}
 
 	private static final Logger logger = Logger.getLogger(SvmStack.class);
@@ -212,6 +220,10 @@ public class SvmStack {
 
 	public int getCurrentStackFrameIndex() {
 		return csfIndex;
+	}
+
+	public StackFrame[] getStackFrames() {
+		return stackFrames;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.codingcrayons.scrappy.vm.syscalls;
 
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.util.Utils;
@@ -11,7 +12,7 @@ public class AppendIntToString implements Syscall {
 	private static String STRING_CLASS = "String";
 
 	@Override
-	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException {
+	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException, HeapOutOfMemoryException {
 		int pointer = vm.stack.getLocalPointer(0);
 		int intval = vm.stack.getLocalInt(1);
 

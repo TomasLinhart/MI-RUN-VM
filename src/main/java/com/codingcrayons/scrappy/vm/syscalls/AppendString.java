@@ -3,6 +3,7 @@ package com.codingcrayons.scrappy.vm.syscalls;
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.SvmHeap;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
@@ -13,7 +14,7 @@ public class AppendString implements Syscall {
 	private static String STRING_CLASS = "String";
 
 	@Override
-	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException {
+	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException, HeapOutOfMemoryException {
 		int pointerA = vm.stack.getLocalPointer(0);
 		int pointerB = vm.stack.getLocalPointer(1);
 

@@ -3,6 +3,7 @@ package com.codingcrayons.scrappy.vm.syscalls;
 import com.codingcrayons.scrappy.vm.ScrappyVM;
 import com.codingcrayons.scrappy.vm.SvmHeap;
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
@@ -13,10 +14,10 @@ public class SplitString implements Syscall {
 	private static String STRING_CLASS = "String";
 
 	@Override
-	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException {
+	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException, HeapOutOfMemoryException {
 		int pointerA = vm.stack.getLocalPointer(0);
 		int bcA = Utils.byteArrayToInt(Utils.getObjectFieldValue(vm.heap.getSpace(), pointerA, 1), 0);
-		int start = pointerA + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.TYPE_BYTE_SIZE;
+		int start = pointerA + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE;
 		byte[] bytes = Utils.subArray(vm.heap.getSpace(), start, bcA);
 		String toSplit = new String(bytes);
 		String[] splitted = toSplit.split(" ");
