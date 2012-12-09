@@ -112,6 +112,27 @@ public class MethodCallInstructionTest {
 		assertEquals(vm.stack.getLocalValue(2), new byte[] { valB[0], valB[1], valB[2], valB[3], SvmType.POINTER.getIdentByte() });
 		assertEquals(vm.stack.getLocalValue(3), new byte[] { valC[0], valC[1], valC[2], valC[3], SvmType.INT.getIdentByte() });
 		assertEquals(vm.stack.getLocalValue(4), new byte[] { valD[0], valD[1], valD[2], valD[3], SvmType.POINTER.getIdentByte() });
+
+		is = vm.instructionList.addInstruction("ipush " + a2);
+		vm.instructionList.addInstruction("istore 1");
+		vm.instructionList.addInstruction("ppush " + b2);
+		vm.instructionList.addInstruction("pstore 2");
+		vm.instructionList.addInstruction("ipush " + c);
+		vm.instructionList.addInstruction("istore 3");
+		vm.instructionList.addInstruction("ppush " + d);
+		vm.instructionList.addInstruction("pstore 4");
+		vm.instructionList.addInstruction("iload 1");
+		vm.instructionList.addInstruction("pload 2");
+		vm.instructionList.addInstruction("iload 3");
+		vm.instructionList.addInstruction("pload 4");
+		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
+		Interpreter.interpret(vm);
+
+		assertEquals(vm.stack.popPointer(), d);
+		assertEquals(vm.stack.popPointer(), c);
+		assertEquals(vm.stack.popPointer(), b2);
+		assertEquals(vm.stack.popPointer(), a2);
 	}
 
 	@Test
