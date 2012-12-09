@@ -5,7 +5,7 @@
 			<field name="readerReference" type="Integer" />
 		</fields>
 		<methods>
-			<method name="open:" type="void">
+			<method name="open:String" type="void">
 				<args>
 					<arg name="s" type="String" />
 				</args>

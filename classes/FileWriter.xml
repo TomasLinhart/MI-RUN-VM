@@ -5,7 +5,7 @@
 			<field name="writerReference" type="Integer" />
 		</fields>
 		<methods>
-			<method name="open:" type="void">
+			<method name="open:String" type="void">
 				<args>
 					<arg name="s" type="String" />
 				</args>
@@ -17,7 +17,7 @@
 					<instruction>return</instruction>
 				</instructions>
 			</method>
-			<method name="writeLine:" type="void">
+			<method name="writeLine:String" type="void">
 				<args>
 					<arg name="s" type="String" />
 				</args>
