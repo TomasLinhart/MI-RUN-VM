@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <classes>
-	<class name="Main">
+	<class name="EntryPoint">
 		<methods>
-			<method name="main:" type="void">
+			<method name="Entry:Array" type="void">
+				<args>
+					<arg name="arguments" type="Array" />
+				</args>
 				<locals>
 					<local name="arr" type="Array" />
 					<local name="sA" type="String" />
@@ -95,7 +98,7 @@
 					<instruction>istore 4</instruction>
 					<instruction>newstring #input/input.txt</instruction>
 					<instruction>iload 4</instruction>
-					<instruction>invokevirtual open:</instruction>
+					<instruction>invokevirtual open:String</instruction>
 					<instruction>iload 4</instruction>
 					<instruction>invokevirtual readLine:</instruction>
 					<instruction>istore 2</instruction>
@@ -108,7 +111,7 @@
 					<instruction>istore 5</instruction>
 					<instruction>newstring #input/output.txt</instruction>
 					<instruction>iload 5</instruction>
-					<instruction>invokevirtual open:</instruction>
+					<instruction>invokevirtual open:String</instruction>
 					<instruction>iload 2</instruction>
 					<instruction>syscall 1</instruction>
 					
@@ -117,7 +120,7 @@
 					<instruction>invokevirtual append:String</instruction>
 					
 					<instruction>iload 5</instruction>
-					<instruction>invokevirtual writeLine:</instruction>
+					<instruction>invokevirtual writeLine:String</instruction>
 					<instruction>iload 5</instruction>
 					<instruction>invokevirtual close:</instruction>
 					

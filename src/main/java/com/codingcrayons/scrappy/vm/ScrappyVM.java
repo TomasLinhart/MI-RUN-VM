@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
 import com.codingcrayons.scrappy.vm.exceptions.ClassNotFoundException;
+import com.codingcrayons.scrappy.vm.exceptions.HeapOutOfMemoryException;
 import com.codingcrayons.scrappy.vm.exceptions.ScrappyVmException;
 import com.codingcrayons.scrappy.vm.instruction.InstructionList;
 import com.codingcrayons.scrappy.vm.io.IOHandle;
@@ -35,11 +36,12 @@ public class ScrappyVM {
 		Interpreter.interpret(this);
 	}
 
-	public void init() throws ClassNotFoundException {
-		int address = heap.alloc(permGenSpace.getClass("Main"));
+	public void init() throws ClassNotFoundException, HeapOutOfMemoryException {
+		int address = heap.alloc(permGenSpace.getClass("EntryPoint"));
 
-		int start = instructionList.addInstruction("ipush " + address);
-		instructionList.addInstruction("invokevirtual main:");
+		int start = instructionList.addInstruction("ppush " + 0);
+		instructionList.addInstruction("ipush " + address);
+		instructionList.addInstruction("invokevirtual Entry:Array");
 		instructionList.addInstruction(null);
 		instructionList.jump(start);
 	}
