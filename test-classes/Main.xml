@@ -102,7 +102,7 @@
 					
 					<instruction>new FileReader</instruction>
 					<instruction>pstore 4</instruction>
-					<instruction>newstring #input/input.txt</instruction>
+					<instruction>newstring #test-input/input.txt</instruction>
 					<instruction>pload 4</instruction>
 					<instruction>invokevirtual open:String</instruction>
 					<instruction>pload 4</instruction>
@@ -115,7 +115,7 @@
 
 					<instruction>new FileWriter</instruction>
 					<instruction>pstore 5</instruction>
-					<instruction>newstring #input/output.txt</instruction>
+					<instruction>newstring #test-input/output.txt</instruction>
 					<instruction>pload 5</instruction>
 					<instruction>invokevirtual open:String</instruction>
 					<instruction>pload 2</instruction>

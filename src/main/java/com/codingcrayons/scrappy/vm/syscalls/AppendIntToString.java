@@ -18,8 +18,6 @@ public class AppendIntToString implements Syscall {
 
 		String res = new String(Utils.getStringBytes(vm, pointer)) + intval;
 
-		System.out.println(res);
-
 		vm.stack.pushPointer(Utils.createSringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), res.getBytes(), res));
 	}
 

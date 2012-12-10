@@ -55,7 +55,7 @@ public class SvmHeap {
 
 	private int allocOnHeap(SvmClass clazz, int size, int bytes) throws HeapOutOfMemoryException {
 		if (!isEnoughSpace(bytes)) {
-			logger.debug("START GC");
+			logger.info("START GC");
 			collect();
 		}
 

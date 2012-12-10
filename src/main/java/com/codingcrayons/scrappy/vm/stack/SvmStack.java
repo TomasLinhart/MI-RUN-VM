@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
-import com.codingcrayons.scrappy.vm.permgen.SvmField;
 import com.codingcrayons.scrappy.vm.permgen.SvmMethod;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
 import com.codingcrayons.scrappy.vm.util.Utils;
@@ -37,17 +36,7 @@ public class SvmStack {
 
 			// current frame is the caller frame
 			for (int i = method.arguments.length - 1; i >= 0; i--) {
-				SvmField argument = method.arguments[i];
 				setLocalValue(1 + i, prevSF.popValue());
-				System.out.println("ARGS: " + objPointer + " " + (1 + i) + " " + getLocalInt(1 + i));
-
-				//				if (argument.type.equals(SvmType.INT)) {
-				//					int value = prevSF.popInt();
-				//					setLocalInt(1 + i, value);
-				//				} else if (argument.type.equals(SvmType.POINTER)) {
-				//					int pointer = prevSF.popPointer();
-				//					setLocalPointer(1 + i, pointer);
-				//				}
 			}
 
 		}
