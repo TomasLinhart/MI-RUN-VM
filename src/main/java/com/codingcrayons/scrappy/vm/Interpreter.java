@@ -19,6 +19,7 @@ import com.codingcrayons.scrappy.vm.instruction.IfPointerNullInstruction;
 import com.codingcrayons.scrappy.vm.instruction.Instruction;
 import com.codingcrayons.scrappy.vm.instruction.InvokevirtualInstruction;
 import com.codingcrayons.scrappy.vm.instruction.JumpInstruction;
+import com.codingcrayons.scrappy.vm.instruction.LoadInstruction;
 import com.codingcrayons.scrappy.vm.instruction.LoadIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.LoadPointerInstruction;
 import com.codingcrayons.scrappy.vm.instruction.LogicalAndIntInstruction;
@@ -35,7 +36,9 @@ import com.codingcrayons.scrappy.vm.instruction.PushPointerInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ReturnInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ReturnIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.ReturnPointerInstruction;
+import com.codingcrayons.scrappy.vm.instruction.ReturnValueInstruction;
 import com.codingcrayons.scrappy.vm.instruction.SetFieldInstruction;
+import com.codingcrayons.scrappy.vm.instruction.StoreInstruction;
 import com.codingcrayons.scrappy.vm.instruction.StoreIntInstruction;
 import com.codingcrayons.scrappy.vm.instruction.StorePointerInstruction;
 import com.codingcrayons.scrappy.vm.instruction.SubIntInstruction;
@@ -46,7 +49,7 @@ public class Interpreter {
 	private static final HashMap<String, Instruction> instructionMap;
 
 	static {
-		instructionMap = new HashMap<String, Instruction>(35);
+		instructionMap = new HashMap<String, Instruction>(40);
 		instructionMap.put("ipush", new PushIntInstruction());
 		instructionMap.put("ppush", new PushPointerInstruction());
 		instructionMap.put("syscall", new SyscallInstruction());
@@ -82,6 +85,9 @@ public class Interpreter {
 		instructionMap.put("ior", new LogicalOrIntInstruction());
 		instructionMap.put("ineg", new LogicalNegIntInstruction());
 		instructionMap.put("popvalue", new PopValueInstruction());
+		instructionMap.put("vreturn", new ReturnValueInstruction());
+		instructionMap.put("vload", new LoadInstruction());
+		instructionMap.put("vstore", new StoreInstruction());
 	}
 
 	public static void interpret(ScrappyVM vm) throws ScrappyVmException {

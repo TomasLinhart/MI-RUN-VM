@@ -101,33 +101,33 @@
 					<instruction>syscall 0</instruction>
 					
 					<instruction>new FileReader</instruction>
-					<instruction>istore 4</instruction>
+					<instruction>pstore 4</instruction>
 					<instruction>newstring #input/input.txt</instruction>
-					<instruction>iload 4</instruction>
+					<instruction>pload 4</instruction>
 					<instruction>invokevirtual open:String</instruction>
-					<instruction>iload 4</instruction>
+					<instruction>pload 4</instruction>
 					<instruction>invokevirtual readLine:</instruction>
-					<instruction>istore 2</instruction>
-					<instruction>iload 4</instruction>
+					<instruction>pstore 2</instruction>
+					<instruction>pload 4</instruction>
 					<instruction>invokevirtual close:</instruction>
-					<instruction>iload 2</instruction>
+					<instruction>pload 2</instruction>
 					<instruction>syscall 1</instruction>
 
 					<instruction>new FileWriter</instruction>
-					<instruction>istore 5</instruction>
+					<instruction>pstore 5</instruction>
 					<instruction>newstring #input/output.txt</instruction>
-					<instruction>iload 5</instruction>
+					<instruction>pload 5</instruction>
 					<instruction>invokevirtual open:String</instruction>
-					<instruction>iload 2</instruction>
+					<instruction>pload 2</instruction>
 					<instruction>syscall 1</instruction>
 					
-					<instruction>iload 2</instruction>
+					<instruction>pload 2</instruction>
 					<instruction>newstring #RESULT: </instruction>
 					<instruction>invokevirtual append:String</instruction>
 					
-					<instruction>iload 5</instruction>
+					<instruction>pload 5</instruction>
 					<instruction>invokevirtual writeLine:String</instruction>
-					<instruction>iload 5</instruction>
+					<instruction>pload 5</instruction>
 					<instruction>invokevirtual close:</instruction>
 					
 					<instruction>ipush 5</instruction>

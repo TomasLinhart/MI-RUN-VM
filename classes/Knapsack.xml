@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<classes>
+	<class name="List">
+		<fields>
+			<field name="Length" type="Integer" />
+			<field name="ArrayPointer" type="Integer" />
+		</fields>
+		<methods>
+			<method name="New:" type="List">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>getfield 1</instruction> <!-- Line: 8 emit "getfield 1" -->
+					<instruction>invokevirtual size:</instruction> <!-- Line: 9 emit "invokevirtual size:" -->
+					<instruction>pload 0</instruction> <!-- Line: 10 emit "pload 0" -->
+					<instruction>setfield 0</instruction> <!-- Line: 11 emit "setfield 0" -->
+					<instruction>return</instruction> <!-- Line: 12 emit "return" -->
+				</instructions>
+			</method>
+			<method name="New:Integer" type="List">
+				<args>
+					<arg name="size" type="Integer" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>iload 1</instruction> <!-- Line: 16 emit "iload 1" // load size -->
+					<instruction>dup</instruction> <!-- Line: 17 emit "dup" // duplicate it -->
+					<instruction>pload 0</instruction> <!-- Line: 18 emit "pload 0" // load self -->
+					<instruction>setfield 0</instruction> <!-- Line: 19 emit "setfield 0" // set first field -->
+					<instruction>newarray</instruction> <!-- Line: 20 emit "newarray" // alloc new array, size is from iload 1 -->
+					<instruction>pload 0</instruction> <!-- Line: 21 emit "pload 0" // load self -->
+					<instruction>setfield 1</instruction> <!-- Line: 22 emit "setfield 1" // set it on self -->
+					<instruction>return</instruction> <!-- Line: 23 emit "return" -->
+				</instructions>
+			</method>
+			<method name="SetAt:Integer:Any" type="Unit">
+				<args>
+					<arg name="index" type="Integer" />
+					<arg name="item" type="Any" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>ipush 1</instruction> <!-- Line: 27 if (index <= @Length) -->
+					<instruction>iload 1</instruction> <!-- Line: 27 if (index <= @Length) -->
+					<instruction>pload 0</instruction> <!-- Line: 27 if (index <= @Length) -->
+					<instruction>getfield 0</instruction> <!-- Line: 27 if (index <= @Length) -->
+					<instruction>ifle 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 27 if (index <= @Length) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ifeq 6</instruction>
+					<instruction>iload 2</instruction> <!-- Line: 28 emit "iload 2" // item -->
+					<instruction>iload 1</instruction> <!-- Line: 29 emit "iload 1" // index -->
+					<instruction>pload 0</instruction> <!-- Line: 30 emit "pload 0" // self -->
+					<instruction>getfield 1</instruction> <!-- Line: 31 emit "getfield 1" // array pointer -->
+					<instruction>setfield</instruction> <!-- Line: 32 emit "setfield" -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="At:Integer" type="Any">
+				<args>
+					<arg name="index" type="Integer" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>iload 1</instruction> <!-- Line: 38 emit "iload 1" // index -->
+					<instruction>pload 0</instruction> <!-- Line: 39 emit "pload 0" // self -->
+					<instruction>getfield 1</instruction> <!-- Line: 40 emit "getfield 1" // array pointer -->
+					<instruction>getfield</instruction> <!-- Line: 41 emit "getfield" -->
+					<instruction>preturn</instruction> <!-- Line: 42 emit "preturn" -->
+				</instructions>
+			</method>
+			<method name="Copy:" type="Unit">
+				<args>
+				</args>
+				<locals>
+					<local name="bool" type="Bool" />
+					<local name="float" type="Float" />
+					<local name="integer" type="Integer" />
+					<local name="string" type="String" />
+				</locals>
+				<instructions>
+					<instruction>ipush 1</instruction> <!-- Line: 50 let bool : Bool = YES -->
+					<instruction>pstore 1</instruction> <!-- Line: 50 let bool : Bool = YES -->
+					<instruction>ipush 3</instruction> <!-- Line: 51 let float : Float = 3.14 -->
+					<instruction>pstore 2</instruction> <!-- Line: 51 let float : Float = 3.14 -->
+					<instruction>ipush 5</instruction> <!-- Line: 52 let integer : Integer = 5 -->
+					<instruction>istore 3</instruction> <!-- Line: 52 let integer : Integer = 5 -->
+					<instruction>newstring #hello world</instruction> <!-- Line: 53 let string : String = "hello world" -->
+					<instruction>pstore 4</instruction> <!-- Line: 53 let string : String = "hello world" -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="ToString:" type="String">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>newstring #hello, i'm array</instruction> <!-- Line: 57 return "hello, i'm array" -->
+					<instruction>preturn</instruction> <!-- Line: 57 return "hello, i'm array" -->
+				</instructions>
+			</method>
+		</methods>
+	</class>
+	<class name="EntryPoint">
+		<fields>
+		</fields>
+		<methods>
+			<method name="Entry:Array" type="Unit">
+				<args>
+					<arg name="args" type="Array" />
+				</args>
+				<locals>
+					<local name="reader" type="FileReader" />
+					<local name="line" type="String" />
+					<local name="parts" type="Array" />
+					<local name="listParts" type="List" />
+					<local name="first" type="String" />
+				</locals>
+				<instructions>
+					<instruction>new FileReader</instruction> <!-- Line: 69 let reader : FileReader = FileReader#New() - creating new instance -->
+					<instruction>dup</instruction> <!-- Line: 69 let reader : FileReader = FileReader#New() - duplicating for constructor call -->
+					<instruction>popvalue</instruction> <!-- Line: 69 let reader : FileReader = FileReader#New() - removing value -->
+					<instruction>pstore 2</instruction> <!-- Line: 69 let reader : FileReader = FileReader#New() -->
+					<instruction>newstring #data.txt</instruction> <!-- Line: 70 reader#open("data.txt") -->
+					<instruction>pload 2</instruction> <!-- Line: 70 reader#open("data.txt") -->
+					<instruction>invokevirtual open:String</instruction> <!-- Line: 70 reader#open("data.txt") - doing method call -->
+					<instruction>pload 2</instruction> <!-- Line: 71 let line : String = reader#readLine() -->
+					<instruction>invokevirtual readLine:</instruction> <!-- Line: 71 let line : String = reader#readLine() - doing method call -->
+					<instruction>pstore 3</instruction> <!-- Line: 71 let line : String = reader#readLine() -->
+					<instruction>pload 2</instruction> <!-- Line: 73 emit "pload 2" -->
+					<instruction>syscall 1</instruction> <!-- Line: 74 emit "syscall 1" -->
+					<instruction>pload 3</instruction> <!-- Line: 75 let parts : Array = line#split() -->
+					<instruction>invokevirtual split:</instruction> <!-- Line: 75 let parts : Array = line#split() - doing method call -->
+					<instruction>pstore 4</instruction> <!-- Line: 75 let parts : Array = line#split() -->
+					<instruction>pload 4</instruction> <!-- Line: 76 parts#size() -->
+					<instruction>invokevirtual size:</instruction> <!-- Line: 76 parts#size() - doing method call -->
+					<instruction>syscall 0</instruction> <!-- Line: 77 emit "syscall 0" -->
+					<instruction>pload 4</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) -->
+					<instruction>invokevirtual size:</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) - doing method call -->
+					<instruction>new List</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) - creating new instance -->
+					<instruction>dup</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) - duplicating for constructor call -->
+					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) - doing method call -->
+					<instruction>pstore 5</instruction> <!-- Line: 78 let listParts : List = List#New(parts#size()) -->
+					<instruction>ipush 0</instruction> <!-- Line: 79 let first : String = listParts#At(0) -->
+					<instruction>pload 5</instruction> <!-- Line: 79 let first : String = listParts#At(0) -->
+					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 79 let first : String = listParts#At(0) - doing method call -->
+					<instruction>pstore 6</instruction> <!-- Line: 79 let first : String = listParts#At(0) -->
+					<instruction>pload 5</instruction> <!-- Line: 80 emit "pload 5" -->
+					<instruction>syscall 1</instruction> <!-- Line: 81 emit "syscall 1" -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+		</methods>
+	</class>
+	<class name="Item">
+		<fields>
+			<field name="Weight" type="Integer" />
+			<field name="Price" type="Integer" />
+		</fields>
+		<methods>
+			<method name="New:Integer:Integer" type="Item">
+				<args>
+					<arg name="weight" type="Integer" />
+					<arg name="price" type="Integer" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>iload 1</instruction> <!-- Line: 100 @Weight = weight -->
+					<instruction>pload 0</instruction> <!-- Line: 100 @Weight = weight - setting field -->
+					<instruction>setfield 0</instruction> <!-- Line: 100 @Weight = weight - setting field -->
+					<instruction>iload 2</instruction> <!-- Line: 101 @Price = price -->
+					<instruction>pload 0</instruction> <!-- Line: 101 @Price = price - setting field -->
+					<instruction>setfield 1</instruction> <!-- Line: 101 @Price = price - setting field -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+		</methods>
+	</class>
+	<class name="Instance">
+		<fields>
+			<field name="Quantity" type="Integer" />
+			<field name="Capacity" type="Integer" />
+			<field name="Items" type="List" />
+		</fields>
+		<methods>
+			<method name="New:Integer:Integer:List" type="Instance">
+				<args>
+					<arg name="quantity" type="Integer" />
+					<arg name="capacity" type="Integer" />
+					<arg name="items" type="List" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>iload 1</instruction> <!-- Line: 111 @Quantity = quantity -->
+					<instruction>pload 0</instruction> <!-- Line: 111 @Quantity = quantity - setting field -->
+					<instruction>setfield 0</instruction> <!-- Line: 111 @Quantity = quantity - setting field -->
+					<instruction>iload 2</instruction> <!-- Line: 112 @Capacity = capacity -->
+					<instruction>pload 0</instruction> <!-- Line: 112 @Capacity = capacity - setting field -->
+					<instruction>setfield 1</instruction> <!-- Line: 112 @Capacity = capacity - setting field -->
+					<instruction>pload 3</instruction> <!-- Line: 113 @Items = items -->
+					<instruction>pload 0</instruction> <!-- Line: 113 @Items = items - setting field -->
+					<instruction>setfield 2</instruction> <!-- Line: 113 @Items = items - setting field -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+		</methods>
+	</class>
+	<class name="Solver">
+		<fields>
+			<field name="Instance" type="Instance" />
+			<field name="Items" type="List" />
+			<field name="BestPrice" type="Integer" />
+			<field name="BestSolution" type="List" />
+		</fields>
+		<methods>
+			<method name="New:Instance" type="Solver">
+				<args>
+					<arg name="instance" type="Instance" />
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>pload 1</instruction> <!-- Line: 124 @Instance = instance -->
+					<instruction>pload 0</instruction> <!-- Line: 124 @Instance = instance - setting field -->
+					<instruction>setfield 0</instruction> <!-- Line: 124 @Instance = instance - setting field -->
+					<instruction>pload 1</instruction> <!-- Line: 125 @Items = instance@Items -->
+					<instruction>getfield 2</instruction> <!-- Line: 125 @Items = instance@Items -->
+					<instruction>pload 0</instruction> <!-- Line: 125 @Items = instance@Items - setting field -->
+					<instruction>setfield 1</instruction> <!-- Line: 125 @Items = instance@Items - setting field -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="Solve:" type="Unit">
+				<args>
+				</args>
+				<locals>
+					<local name="array" type="List" />
+					<local name="i" type="Integer" />
+				</locals>
+				<instructions>
+					<instruction>ipush 10</instruction> <!-- Line: 129 let array : List = List#New(10) -->
+					<instruction>new List</instruction> <!-- Line: 129 let array : List = List#New(10) - creating new instance -->
+					<instruction>dup</instruction> <!-- Line: 129 let array : List = List#New(10) - duplicating for constructor call -->
+					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 129 let array : List = List#New(10) - doing method call -->
+					<instruction>pstore 1</instruction> <!-- Line: 129 let array : List = List#New(10) -->
+					<instruction>pload 1</instruction> <!-- Line: 131 SolveRecursive(array, 0) -->
+					<instruction>ipush 0</instruction> <!-- Line: 131 SolveRecursive(array, 0) -->
+					<instruction>pload 0</instruction> <!-- Line: 131 SolveRecursive(array, 0) - loading self -->
+					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 131 SolveRecursive(array, 0) - doing method call -->
+					<instruction>ipush 0</instruction> <!-- Line: 133 let i : Integer = 0 -->
+					<instruction>istore 2</instruction> <!-- Line: 133 let i : Integer = 0 -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="SolveRecursive:List:Integer" type="Unit">
+				<args>
+					<arg name="array" type="List" />
+					<arg name="position" type="Integer" />
+				</args>
+				<locals>
+					<local name="totalPrice" type="Integer" />
+					<local name="totalWeight" type="Integer" />
+					<local name="i" type="Integer" />
+					<local name="item" type="Item" />
+				</locals>
+				<instructions>
+					<instruction>ipush 1</instruction> <!-- Line: 138 if (array@Length == position) -->
+					<instruction>pload 1</instruction> <!-- Line: 138 if (array@Length == position) -->
+					<instruction>getfield 0</instruction> <!-- Line: 138 if (array@Length == position) -->
+					<instruction>iload 2</instruction> <!-- Line: 138 if (array@Length == position) -->
+					<instruction>ifeq 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 138 if (array@Length == position) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ifeq 82</instruction>
+					<instruction>ipush 0</instruction> <!-- Line: 139 let totalPrice : Integer = 0 -->
+					<instruction>istore 3</instruction> <!-- Line: 139 let totalPrice : Integer = 0 -->
+					<instruction>ipush 0</instruction> <!-- Line: 140 let totalWeight : Integer = 0 -->
+					<instruction>istore 4</instruction> <!-- Line: 140 let totalWeight : Integer = 0 -->
+					<instruction>ipush 0</instruction> <!-- Line: 142 let i : Integer = 0 -->
+					<instruction>istore 5</instruction> <!-- Line: 142 let i : Integer = 0 -->
+					<instruction>ipush 1</instruction> <!-- Line: 143 while (i < array@Length) -->
+					<instruction>iload 5</instruction> <!-- Line: 143 while (i < array@Length) -->
+					<instruction>pload 1</instruction> <!-- Line: 143 while (i < array@Length) -->
+					<instruction>getfield 0</instruction> <!-- Line: 143 while (i < array@Length) -->
+					<instruction>iflt 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 143 while (i < array@Length) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ifeq 41</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 144 if (totalWeight > @Instance) -->
+					<instruction>iload 4</instruction> <!-- Line: 144 if (totalWeight > @Instance) -->
+					<instruction>pload 0</instruction> <!-- Line: 144 if (totalWeight > @Instance) -->
+					<instruction>getfield 0</instruction> <!-- Line: 144 if (totalWeight > @Instance) -->
+					<instruction>ifgt 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 144 if (totalWeight > @Instance) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ifeq 2</instruction>
+					<instruction>return</instruction> <!-- Line: 145 return -->
+					<instruction>ipush 1</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>iload 5</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>pload 1</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>ipush 1</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>ifeq 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 148 if ((Integer) array#At(i) == YES) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>ifeq 16</instruction>
+					<instruction>iload 5</instruction> <!-- Line: 149 let item : Item = (Item) @Items#At(i) -->
+					<instruction>pload 0</instruction> <!-- Line: 149 let item : Item = (Item) @Items#At(i) -->
+					<instruction>getfield 1</instruction> <!-- Line: 149 let item : Item = (Item) @Items#At(i) -->
+					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 149 let item : Item = (Item) @Items#At(i) -->
+					<instruction>pstore 6</instruction> <!-- Line: 149 let item : Item = (Item) @Items#At(i) -->
+					<instruction>iload 3</instruction> <!-- Line: 150 totalPrice = totalPrice + item@Price -->
+					<instruction>pload 6</instruction> <!-- Line: 150 totalPrice = totalPrice + item@Price -->
+					<instruction>getfield 1</instruction> <!-- Line: 150 totalPrice = totalPrice + item@Price -->
+					<instruction>iadd</instruction> <!-- Line: 150 totalPrice = totalPrice + item@Price -->
+					<instruction>istore</instruction> <!-- Line: 150 totalPrice = totalPrice + item@Price - assigning variable -->
+					<instruction>iload 4</instruction> <!-- Line: 151 totalWeight = totalWeight + item@Weight -->
+					<instruction>pload 6</instruction> <!-- Line: 151 totalWeight = totalWeight + item@Weight -->
+					<instruction>getfield 0</instruction> <!-- Line: 151 totalWeight = totalWeight + item@Weight -->
+					<instruction>iadd</instruction> <!-- Line: 151 totalWeight = totalWeight + item@Weight -->
+					<instruction>istore</instruction> <!-- Line: 151 totalWeight = totalWeight + item@Weight - assigning variable -->
+					<instruction>iload 5</instruction> <!-- Line: 154 i = i + 1 -->
+					<instruction>ipush 1</instruction> <!-- Line: 154 i = i + 1 -->
+					<instruction>iadd</instruction> <!-- Line: 154 i = i + 1 -->
+					<instruction>istore</instruction> <!-- Line: 154 i = i + 1 - assigning variable -->
+					<instruction>jump -48</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>iload 4</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>pload 0</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>getfield 0</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>getfield 1</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>ifle 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>iload 3</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>pload 0</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>getfield 2</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>ifgt 3</instruction>
+					<instruction>ipush 1</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>jump 2</instruction>
+					<instruction>ipush 0</instruction>
+					<instruction>iand</instruction> <!-- Line: 157 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
+					<instruction>ifeq 9</instruction>
+					<instruction>new List</instruction> <!-- Line: 158 @BestSolution = List#Copy() - creating new instance -->
+					<instruction>dup</instruction> <!-- Line: 158 @BestSolution = List#Copy() - duplicating for constructor call -->
+					<instruction>invokevirtual Copy:</instruction> <!-- Line: 158 @BestSolution = List#Copy() - doing method call -->
+					<instruction>pload 0</instruction> <!-- Line: 158 @BestSolution = List#Copy() - setting field -->
+					<instruction>setfield 3</instruction> <!-- Line: 158 @BestSolution = List#Copy() - setting field -->
+					<instruction>iload 3</instruction> <!-- Line: 159 @BestPrice = totalPrice -->
+					<instruction>pload 0</instruction> <!-- Line: 159 @BestPrice = totalPrice - setting field -->
+					<instruction>setfield 2</instruction> <!-- Line: 159 @BestPrice = totalPrice - setting field -->
+					<instruction>iload 2</instruction> <!-- Line: 163 array#SetAt(position, NO) -->
+					<instruction>ipush 0</instruction> <!-- Line: 163 array#SetAt(position, NO) -->
+					<instruction>pload 1</instruction> <!-- Line: 163 array#SetAt(position, NO) -->
+					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 163 array#SetAt(position, NO) - doing method call -->
+					<instruction>pload 1</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) -->
+					<instruction>iload 2</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) -->
+					<instruction>ipush 1</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) -->
+					<instruction>iadd</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) -->
+					<instruction>pload 0</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) - loading self -->
+					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 164 SolveRecursive(array, position + 1) - doing method call -->
+					<instruction>iload 2</instruction> <!-- Line: 165 array#SetAt(position, YES) -->
+					<instruction>ipush 1</instruction> <!-- Line: 165 array#SetAt(position, YES) -->
+					<instruction>pload 1</instruction> <!-- Line: 165 array#SetAt(position, YES) -->
+					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 165 array#SetAt(position, YES) - doing method call -->
+					<instruction>pload 1</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) -->
+					<instruction>iload 2</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) -->
+					<instruction>ipush 1</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) -->
+					<instruction>iadd</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) -->
+					<instruction>pload 0</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) - loading self -->
+					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 166 SolveRecursive(array, position + 1) - doing method call -->
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="ToString:" type="String">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>pload 0</instruction> <!-- Line: 170 return @BestSolution#ToString() -->
+					<instruction>getfield 3</instruction> <!-- Line: 170 return @BestSolution#ToString() -->
+					<instruction>invokevirtual ToString:</instruction> <!-- Line: 170 return @BestSolution#ToString() - doing method call -->
+					<instruction>preturn</instruction> <!-- Line: 170 return @BestSolution#ToString() -->
+				</instructions>
+			</method>
+		</methods>
+	</class>
+</classes>

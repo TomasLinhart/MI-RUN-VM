@@ -10,6 +10,7 @@ import com.codingcrayons.scrappy.vm.instruction.InstructionList;
 import com.codingcrayons.scrappy.vm.io.IOHandle;
 import com.codingcrayons.scrappy.vm.permgen.PermGenSpace;
 import com.codingcrayons.scrappy.vm.stack.SvmStack;
+import com.codingcrayons.scrappy.vm.util.Utils;
 
 public class ScrappyVM {
 
@@ -23,6 +24,12 @@ public class ScrappyVM {
 
 	public ScrappyVM(int heapSize, int stackFramesCount, int stackFrameSize, String[] classFiles) throws ScrappyVmException, DocumentException {
 		logger.info("ScrappyVM starting");
+
+		int x = Utils.byteArrayToInt(new byte[] { 0, 0, 2, -26 }, 0);
+		System.out.println(x);
+
+		x = Utils.byteArrayToInt(new byte[] { 0, 0, 1, -37 }, 0);
+		System.out.println(x);
 
 		instructionList = new InstructionList();
 		permGenSpace = new PermGenSpace(classFiles, instructionList);

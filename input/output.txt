@@ -1,0 +1,1 @@
+RESULT: Zdravim ze vstupniho souboru

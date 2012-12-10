@@ -30,7 +30,7 @@ public class SvmStack {
 
 			// push locals
 			// 0 - object reference
-			pushInt(objPointer);
+			pushPointer(objPointer);
 
 			// 1 - n (args + other locals)
 			next += (method.arguments.length + method.locals.length) * SvmType.STORED_TYPE_BYTE_SIZE;
@@ -38,13 +38,16 @@ public class SvmStack {
 			// current frame is the caller frame
 			for (int i = method.arguments.length - 1; i >= 0; i--) {
 				SvmField argument = method.arguments[i];
-				if (argument.type.equals(SvmType.INT)) {
-					int value = prevSF.popInt();
-					setLocalInt(1 + i, value);
-				} else if (argument.type.equals(SvmType.POINTER)) {
-					int pointer = prevSF.popPointer();
-					setLocalPointer(1 + i, pointer);
-				}
+				setLocalValue(1 + i, prevSF.popValue());
+				System.out.println("ARGS: " + objPointer + " " + (1 + i) + " " + getLocalInt(1 + i));
+
+				//				if (argument.type.equals(SvmType.INT)) {
+				//					int value = prevSF.popInt();
+				//					setLocalInt(1 + i, value);
+				//				} else if (argument.type.equals(SvmType.POINTER)) {
+				//					int pointer = prevSF.popPointer();
+				//					setLocalPointer(1 + i, pointer);
+				//				}
 			}
 
 		}
@@ -104,6 +107,13 @@ public class SvmStack {
 				stackSpace[i + valueStart] = bytes[i];
 			}
 			stackSpace[i + valueStart] = type;
+		}
+
+		private void setLocalValue(int index, byte[] value) {
+			int valueStart = index * SvmType.STORED_TYPE_BYTE_SIZE + SvmType.STORED_TYPE_BYTE_SIZE;
+			for (int i = 0; i < value.length; i++) {
+				stackSpace[i + valueStart] = value[i];
+			}
 		}
 
 		public void setLocalInt(int index, int value) {
@@ -201,6 +211,10 @@ public class SvmStack {
 
 	public void setLocalPointer(int index, int pointer) {
 		currentStackFrame().setLocalPointer(index, pointer);
+	}
+
+	public void setLocalValue(int index, byte[] value) {
+		currentStackFrame().setLocalValue(index, value);
 	}
 
 	public void push(byte[] bytes) throws StackOverflowException {

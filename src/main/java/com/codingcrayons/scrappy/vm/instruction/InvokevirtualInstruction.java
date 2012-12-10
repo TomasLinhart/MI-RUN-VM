@@ -20,7 +20,7 @@ public class InvokevirtualInstruction extends Instruction {
 		String methodName = params[0];
 		int objPointer = vm.stack.popPointer();
 
-		logger.debug("invoked " + methodName);
+		logger.debug("invoked " + methodName + vm.instructionList.getPc());
 
 		Utils.checkNullPointer(objPointer);
 
