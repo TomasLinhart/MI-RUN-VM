@@ -20,7 +20,7 @@ public class HeapRelatedInstructionTest {
 
 	@BeforeMethod
 	public void setup() throws ScrappyVmException, DocumentException {
-		vm = new ScrappyVM(100, 1, 100, new String[] { "test-classes/Test.xml" });
+		vm = new ScrappyVM(200, 1, 100, new String[] { "test-classes/Test.xml" });
 	}
 
 	@Test

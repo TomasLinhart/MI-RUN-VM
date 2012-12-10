@@ -63,7 +63,28 @@ public class MethodCallInstructionTest {
 				new SvmField[] {},
 				SvmType.POINTER,
 				is);
-		SvmClass clazz = new SvmClass("Test1", new SvmField[] {}, new SvmMethod[] { mA, mB, mC, mD }, null);
+
+		is = vm.instructionList.addInstruction("ppush 5");
+		vm.instructionList.addInstruction("vreturn");
+
+		SvmMethod mE = new SvmMethod(
+				"retAnyPointer:",
+				new SvmField[] {},
+				new SvmField[] {},
+				SvmType.POINTER,
+				is);
+
+		is = vm.instructionList.addInstruction("ipush 5");
+		vm.instructionList.addInstruction("vreturn");
+
+		SvmMethod mF = new SvmMethod(
+				"retAnyInteger:",
+				new SvmField[] {},
+				new SvmField[] {},
+				SvmType.POINTER,
+				is);
+
+		SvmClass clazz = new SvmClass("Test1", new SvmField[] {}, new SvmMethod[] { mA, mB, mC, mD, mE, mF }, null);
 		vm.permGenSpace.addClass(clazz);
 	}
 
@@ -113,6 +134,15 @@ public class MethodCallInstructionTest {
 		assertEquals(vm.stack.getLocalValue(3), new byte[] { valC[0], valC[1], valC[2], valC[3], SvmType.INT.getIdentByte() });
 		assertEquals(vm.stack.getLocalValue(4), new byte[] { valD[0], valD[1], valD[2], valD[3], SvmType.POINTER.getIdentByte() });
 
+		byte[] valE = new byte[] { 1, 2, 3, 4, 0 };
+		byte[] valF = new byte[] { 1, 2, 3, 4, 1 };
+
+		vm.stack.setLocalValue(1, valE);
+		vm.stack.setLocalValue(2, valF);
+
+		assertEquals(vm.stack.getLocalValue(1), new byte[] { valE[0], valE[1], valE[2], valE[3], valE[4] });
+		assertEquals(vm.stack.getLocalValue(2), new byte[] { valF[0], valF[1], valF[2], valF[3], valF[4] });
+
 		is = vm.instructionList.addInstruction("ipush " + a2);
 		vm.instructionList.addInstruction("istore 1");
 		vm.instructionList.addInstruction("ppush " + b2);
@@ -133,6 +163,23 @@ public class MethodCallInstructionTest {
 		assertEquals(vm.stack.popPointer(), c);
 		assertEquals(vm.stack.popPointer(), b2);
 		assertEquals(vm.stack.popPointer(), a2);
+
+		is = vm.instructionList.addInstruction("ipush " + a2);
+		vm.instructionList.addInstruction("vstore 1");
+		vm.instructionList.addInstruction("ppush " + b2);
+		vm.instructionList.addInstruction("vstore 2");
+		vm.instructionList.addInstruction("vload 1");
+		vm.instructionList.addInstruction("vload 2");
+		vm.instructionList.addInstruction(null);
+		vm.instructionList.jump(is);
+		Interpreter.interpret(vm);
+
+		valE = Utils.intToByteArray(a2);
+		valF = Utils.intToByteArray(b2);
+
+		assertEquals(vm.stack.popValue(), new byte[] { valF[0], valF[1], valF[2], valF[3], SvmType.POINTER.getIdentByte() });
+		assertEquals(vm.stack.popValue(), new byte[] { valE[0], valE[1], valE[2], valE[3], SvmType.INT.getIdentByte() });
+
 	}
 
 	@Test
@@ -150,15 +197,17 @@ public class MethodCallInstructionTest {
 	}
 
 	@DataProvider
-	public Object[][] ipreturnArgs() {
+	public Object[][] ipvreturnArgs() {
 		return new Object[][] {
 				{ "retInt:", SvmType.INT.getIdentByte() },
 				{ "retPointer:", SvmType.POINTER.getIdentByte() },
+				{ "retAnyPointer:", SvmType.POINTER.getIdentByte() },
+				{ "retAnyInteger:", SvmType.INT.getIdentByte() },
 		};
 	}
 
-	@Test(dataProvider = "ipreturnArgs")
-	public void testIPreturnInstruction(String method, byte type) throws ScrappyVmException {
+	@Test(dataProvider = "ipvreturnArgs")
+	public void testIPVreturnInstruction(String method, byte type) throws ScrappyVmException {
 		assertEquals(vm.stack.getCurrentStackFrameIndex(), 0);
 
 		int is = vm.instructionList.addInstruction("new Test1");
