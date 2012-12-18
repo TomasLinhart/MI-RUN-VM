@@ -32,7 +32,7 @@
 					<instruction>dup</instruction> <!-- Line: 17 emit "dup" // duplicate it -->
 					<instruction>vload 0</instruction> <!-- Line: 18 emit "vload 0" // load self -->
 					<instruction>setfield 0</instruction> <!-- Line: 19 emit "setfield 0" // set first field -->
-					<instruction>newarray</instruction> <!-- Line: 20 emit "newarray" // alloc new array, size is from vload 1 -->
+					<instruction>newarray</instruction> <!-- Line: 20 emit "newarray" // alloc new array, size is from iload 1 -->
 					<instruction>vload 0</instruction> <!-- Line: 21 emit "vload 0" // load self -->
 					<instruction>setfield 1</instruction> <!-- Line: 22 emit "setfield 1" // set it on self -->
 					<instruction>return</instruction> <!-- Line: 23 emit "return" -->
