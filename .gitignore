@@ -6,3 +6,6 @@ bin/
 out/
 target/
 test-output/
+.idea/
+*.iml
+*.zip

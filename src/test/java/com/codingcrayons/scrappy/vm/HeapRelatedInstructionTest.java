@@ -39,7 +39,7 @@ public class HeapRelatedInstructionTest {
 		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), 1), 4); // 4 libs
 
 		// 8 header + 5 * num of fields
-		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + 5 * 2);
+		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + SvmType.TYPE_BYTE_SIZE * 2);
 	}
 
 	@DataProvider
@@ -75,8 +75,8 @@ public class HeapRelatedInstructionTest {
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
-		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE), 5);
-		assertEquals(vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + (1 + field) * SvmType.STORED_TYPE_BYTE_SIZE - 1], type);
+		assertEquals(Utils.convertSVMTypeToInt(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.TYPE_BYTE_SIZE)), 5);
+		assertEquals(Utils.isPointer(vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + (1 + field) * SvmType.TYPE_BYTE_SIZE - 1]),  type == SvmType.POINTER.getIdentByte());
 	}
 
 	@DataProvider
@@ -111,19 +111,23 @@ public class HeapRelatedInstructionTest {
 		Interpreter.interpret(vm);
 
 		// manually set heap value
-		byte[] value = Utils.intToByteArray(5);
-		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE] = value[0];
-		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE + 1] = value[1];
-		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE + 2] = value[2];
-		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE + 3] = value[3];
-		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.STORED_TYPE_BYTE_SIZE + 4] = type;
+		byte[] value;
+		if (type == SvmType.INT.getIdentByte()) {
+			value = Utils.intToByteArray(Utils.createSVMInt(5));
+		} else {
+			value = Utils.intToByteArray(Utils.createSVMPointer(5));
+		}
+		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.TYPE_BYTE_SIZE] = value[0];
+		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.TYPE_BYTE_SIZE + 1] = value[1];
+		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.TYPE_BYTE_SIZE + 2] = value[2];
+		vm.heap.getSpace()[start + SvmHeap.OBJECT_HEADER_BYTES + field * SvmType.TYPE_BYTE_SIZE + 3] = value[3];
 
 		is = vm.instructionList.addInstruction("getfield" + (inline ? " " + field : ""));
 		vm.instructionList.addInstruction(null);
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
-		assertEquals(vm.stack.popValue(), new byte[] { value[0], value[1], value[2], value[3], type });
+		assertEquals(vm.stack.popValue(), new byte[] { value[0], value[1], value[2], value[3] });
 	}
 
 	@DataProvider
@@ -154,7 +158,7 @@ public class HeapRelatedInstructionTest {
 		Interpreter.interpret(vm);
 
 		assertEquals(vm.stack.popPointer(), start); // object pointer on heap
-		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + size * SvmType.STORED_TYPE_BYTE_SIZE);
+		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + size * SvmType.TYPE_BYTE_SIZE);
 		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), start + 4), size);
 	}
 
@@ -169,9 +173,9 @@ public class HeapRelatedInstructionTest {
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
-		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE + param.getBytes().length);
-		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES), param.length());
-		assertEquals(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES + SvmType.STORED_TYPE_BYTE_SIZE), param.getBytes().length);
+		assertEquals(vm.heap.getNext(), start + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.TYPE_BYTE_SIZE + param.getBytes().length);
+		assertEquals(Utils.convertSVMTypeToInt(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES)), param.length());
+		assertEquals(Utils.convertSVMTypeToInt(Utils.byteArrayToInt(vm.heap.getSpace(), start + SvmHeap.OBJECT_HEADER_BYTES + SvmType.TYPE_BYTE_SIZE)), param.getBytes().length);
 		assertEquals(Utils.getStringBytes(vm, start), param.getBytes());
 		assertEquals(Utils.getStringValue(vm, start), param);
 	}

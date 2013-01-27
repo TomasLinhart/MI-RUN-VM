@@ -17,6 +17,6 @@ public class NewStringInstruction extends Instruction {
 		byte[] bytes = value.getBytes();
 		SvmClass clazz = vm.permGenSpace.getClass(STRING_CLASS);
 
-		vm.stack.pushPointer(Utils.createSringOnHeap(vm, clazz, bytes, value));
+		vm.stack.pushPointer(Utils.createStringOnHeap(vm, clazz, bytes, value));
 	}
 }

@@ -8,9 +8,9 @@ public class ReturnPointerInstruction extends Instruction {
 
 	@Override
 	public void process(ScrappyVM vm, String[] params) throws StackException, StackOverflowException {
-		int returnValue = vm.stack.popInt();
+		int returnPointer = vm.stack.popPointer();
 		int address = vm.stack.discardStackFrame();
-		vm.stack.pushPointer(returnValue);
+		vm.stack.pushPointer(returnPointer);
 
 		vm.instructionList.jump(address);
 	}

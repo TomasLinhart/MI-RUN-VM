@@ -222,13 +222,17 @@ public class MethodScopeInstructionTest {
 		Interpreter.interpret(vm);
 
 		byte[] pop = vm.stack.popValue();
-		byte[] num = Utils.intToByteArray(10);
+		byte[] num;
+		if (type == SvmType.INT.getIdentByte()) {
+			num = Utils.intToByteArray(Utils.createSVMInt(10));
+		} else {
+			num = Utils.intToByteArray(Utils.createSVMPointer(10));
+		}
 
 		assertEquals(pop[0], num[0]);
 		assertEquals(pop[1], num[1]);
 		assertEquals(pop[2], num[2]);
 		assertEquals(pop[3], num[3]);
-		assertEquals(pop[4], type);
 	}
 
 }

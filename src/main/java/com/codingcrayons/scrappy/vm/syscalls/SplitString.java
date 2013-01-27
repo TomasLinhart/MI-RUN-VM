@@ -16,8 +16,8 @@ public class SplitString implements Syscall {
 	@Override
 	public void call(ScrappyVM vm) throws StackException, ClassNotFoundException, StackOverflowException, HeapOutOfMemoryException {
 		int pointerA = vm.stack.getLocalPointer(0);
-		int bcA = Utils.byteArrayToInt(Utils.getObjectFieldValue(vm.heap.getSpace(), pointerA, 1), 0);
-		int start = pointerA + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.STORED_TYPE_BYTE_SIZE;
+		int bcA = Utils.convertSVMTypeToInt(Utils.byteArrayToInt(Utils.getObjectFieldValue(vm.heap.getSpace(), pointerA, 1), 0));
+		int start = pointerA + SvmHeap.OBJECT_HEADER_BYTES + 2 * SvmType.TYPE_BYTE_SIZE;
 		byte[] bytes = Utils.subArray(vm.heap.getSpace(), start, bcA);
 		String toSplit = new String(bytes);
 		String[] splitted = toSplit.split(" ");
@@ -25,7 +25,8 @@ public class SplitString implements Syscall {
 		int arrPointer = vm.heap.allocArray(splitted.length);
 
 		for (int i = 0; i < splitted.length; i++) {
-			int partPointer = Utils.createSringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), splitted[i].getBytes(), splitted[i]);
+			int partPointer = Utils.createStringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), splitted[i].getBytes(),
+					splitted[i]);
 			Utils.setObjectFieldPointerValue(vm.heap.getSpace(), arrPointer, i, partPointer);
 		}
 

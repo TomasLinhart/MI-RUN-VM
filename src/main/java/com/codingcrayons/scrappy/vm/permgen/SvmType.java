@@ -5,7 +5,6 @@ public enum SvmType {
 	INT(4, (byte) 0), POINTER(4, (byte) 1), NULL(4, (byte) 2), VOID(0, (byte) 3);
 
 	public static int TYPE_BYTE_SIZE = 4;
-	public static int STORED_TYPE_BYTE_SIZE = 5;
 
 	private int size;
 	private byte identByte;

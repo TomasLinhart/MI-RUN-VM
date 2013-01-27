@@ -29,7 +29,7 @@ public class ReadLine implements Syscall {
 		} catch (IOException e) {
 			throw new RuntimeException("Line can not be readed");
 		}
-		vm.stack.pushPointer(Utils.createSringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), line.getBytes(), line));
+		vm.stack.pushPointer(Utils.createStringOnHeap(vm, vm.permGenSpace.getClass(STRING_CLASS), line.getBytes(), line));
 	}
 
 }

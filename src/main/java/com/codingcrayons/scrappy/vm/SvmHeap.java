@@ -18,7 +18,7 @@ public class SvmHeap {
 
 	private static final Logger logger = Logger.getLogger(SvmHeap.class);
 
-	public static final int OBJECT_HEADER_BYTES = 8;
+	public static final int OBJECT_HEADER_BYTES = 12;
 
 	private final byte[] spaceA;
 	private final byte[] spaceB;
@@ -37,15 +37,15 @@ public class SvmHeap {
 	}
 
 	public int alloc(SvmClass clazz) throws HeapOutOfMemoryException {
-		return allocOnHeap(clazz, 0, clazz.fields.length * SvmType.STORED_TYPE_BYTE_SIZE);
+		return allocOnHeap(clazz, 0, clazz.fields.length * SvmType.TYPE_BYTE_SIZE);
 	}
 
 	public int allocArray(int size) throws ClassNotFoundException, HeapOutOfMemoryException {
-		return allocOnHeap(vm.permGenSpace.getClass("Array"), size, size * SvmType.STORED_TYPE_BYTE_SIZE);
+		return allocOnHeap(vm.permGenSpace.getClass("Array"), size, size * SvmType.TYPE_BYTE_SIZE);
 	}
 
 	public int allocByteClass(SvmClass clazz, byte[] bytes) throws HeapOutOfMemoryException {
-		int fieldsL = clazz.fields.length * SvmType.STORED_TYPE_BYTE_SIZE;
+		int fieldsL = clazz.fields.length * SvmType.TYPE_BYTE_SIZE;
 		int start = allocOnHeap(clazz, 0, fieldsL + bytes.length);
 		for (int i = 0; i < bytes.length; i++) {
 			getSpace()[start + OBJECT_HEADER_BYTES + i + fieldsL] = bytes[i];
@@ -55,7 +55,7 @@ public class SvmHeap {
 
 	private int allocOnHeap(SvmClass clazz, int size, int bytes) throws HeapOutOfMemoryException {
 		if (!isEnoughSpace(bytes)) {
-			logger.info("START GC");
+			logger.info("STARTING GC");
 			collect();
 		}
 
@@ -66,6 +66,7 @@ public class SvmHeap {
 		int start = next;
 		insertIntToHeap(clazz.address);
 		insertIntToHeap(size);
+		insertIntToHeap(-1); // alloc GC state
 		for (; bytes > 0; bytes--) {
 			getSpace()[next++] = 0;
 		}
@@ -102,13 +103,13 @@ public class SvmHeap {
 
 	private int countObjectSize(SvmClass clazz, int pointer) {
 		if (clazz.name.equals("Array")) {
-			int size = Utils.byteArrayToInt(getSpace(), pointer + SvmType.INT.getSize());
-			return OBJECT_HEADER_BYTES + size * SvmType.STORED_TYPE_BYTE_SIZE;
+			int size = Utils.byteArrayToInt(getSpace(), pointer + SvmType.TYPE_BYTE_SIZE);
+			return OBJECT_HEADER_BYTES + size * SvmType.TYPE_BYTE_SIZE;
 		} else if (clazz.name.equals("String")) {
-			int size = Utils.byteArrayToInt(Utils.getObjectFieldValue(getSpace(), pointer, 1), 0);
-			return OBJECT_HEADER_BYTES + clazz.fields.length * SvmType.STORED_TYPE_BYTE_SIZE + size;
+			int size = Utils.convertSVMTypeToInt(Utils.byteArrayToInt(Utils.getObjectFieldValue(getSpace(), pointer, 1), 0));
+			return OBJECT_HEADER_BYTES + clazz.fields.length * SvmType.TYPE_BYTE_SIZE + size;
 		} else {
-			return OBJECT_HEADER_BYTES + clazz.fields.length * SvmType.STORED_TYPE_BYTE_SIZE;
+			return OBJECT_HEADER_BYTES + clazz.fields.length * SvmType.TYPE_BYTE_SIZE;
 		}
 	}
 
@@ -120,33 +121,39 @@ public class SvmHeap {
 
 	private void collect() {
 		byte[] current = activeSpace == 0 ? spaceB : spaceA;
-		Map<Integer, Integer> remap = new TreeMap<Integer, Integer>();
+		//Map<Integer, Integer> remap = new TreeMap<Integer, Integer>();
 		int currentNext = 0;
 		int endPointer = 1;
 		Queue<Integer> pointerQueue = new LinkedList<Integer>();
 		current[currentNext++] = 0; // null pointer
 
-		// find all pointer form stack
+		// find all pointer from stack
 		for (StackFrame sf : vm.stack.getStackFrames()) {
 			if (sf == null) {
 				break;
 			}
-			for (int i = SvmType.POINTER.getSize(); i < sf.getNext(); i += SvmType.STORED_TYPE_BYTE_SIZE) {
-				if (sf.getStackSpace()[i] == SvmType.POINTER.getIdentByte()) {
-					int pointer = Utils.byteArrayToInt(sf.getStackSpace(), i - SvmType.POINTER.getSize());
+			for (int i = SvmType.TYPE_BYTE_SIZE; i <= sf.getNext(); i += SvmType.TYPE_BYTE_SIZE) {
+
+				if (Utils.isPointer(sf.getStackSpace()[i-1])) {
+					int pointer = Utils.convertSVMTypeToInt(Utils.byteArrayToInt(sf.getStackSpace(), i - SvmType.POINTER.getSize()));
 
 					if (pointer == 0) {
 						// null pointer
 						continue;
 					}
 
-					Integer map = remap.get(pointer);
-					if (map != null) {
+					//Integer map = remap.get(pointer);
+					//if (map != null) {
+					int gcState = Utils.getGCState(getSpace(), pointer);
+					if (gcState != -1) {
 						// replace stack pointer to new value and continue
-						copyToNewSpace(Utils.intToByteArray(map), sf.getStackSpace(), i - SvmType.POINTER.getSize(), 0, SvmType.TYPE_BYTE_SIZE);
+						// copyToNewSpace(Utils.intToByteArray(Utils.createSVMPointer(map)), sf.getStackSpace(), i - SvmType.TYPE_BYTE_SIZE, 0, SvmType.TYPE_BYTE_SIZE);
+						copyToNewSpace(Utils.intToByteArray(Utils.createSVMPointer(gcState)), sf.getStackSpace(), i - SvmType.TYPE_BYTE_SIZE, 0, SvmType.TYPE_BYTE_SIZE);
 					} else {
-						remap.put(pointer, currentNext);
-						copyToNewSpace(Utils.intToByteArray(currentNext), sf.getStackSpace(), i - SvmType.POINTER.getSize(), 0, SvmType.TYPE_BYTE_SIZE);
+						//remap.put(pointer, currentNext);
+						Utils.setGCState(getSpace(), pointer, currentNext);
+
+						copyToNewSpace(Utils.intToByteArray(Utils.createSVMPointer(currentNext)), sf.getStackSpace(), i - SvmType.TYPE_BYTE_SIZE, 0, SvmType.TYPE_BYTE_SIZE);
 
 						endPointer += countObjectSize(vm.permGenSpace.getClass(Utils.byteArrayToInt(getSpace(), pointer)), pointer); //will be copied
 						pointerQueue.add(pointer);
@@ -163,12 +170,13 @@ public class SvmHeap {
 								// copy string
 								copyToNewSpace(getSpace(), current, currentNext, processPointer, countObjectSize(clazz, processPointer));
 							} else if (clazz.name.equals("Array")) {
-								int arraySize = Utils.byteArrayToInt(getSpace(), processPointer + SvmType.INT.getSize());
-								endPointer = copyObject(clazz, remap, pointerQueue, current, currentNext, processPointer, endPointer, arraySize);
+								int arraySize = Utils.byteArrayToInt(getSpace(), processPointer + SvmType.TYPE_BYTE_SIZE);
+								endPointer = copyObject(pointerQueue, current, currentNext, processPointer, endPointer, arraySize);
 							} else {
-								endPointer = copyObject(clazz, remap, pointerQueue, current, currentNext, processPointer, endPointer, clazz.fields.length);
+								endPointer = copyObject(pointerQueue, current, currentNext, processPointer, endPointer, clazz.fields.length);
 							}
-							remap.put(processPointer, currentNext);
+							//remap.put(processPointer, currentNext);
+							Utils.setGCState(getSpace(), processPointer, currentNext);
 							currentNext += countObjectSize(clazz, processPointer);
 						}
 					}
@@ -179,15 +187,21 @@ public class SvmHeap {
 		next = currentNext;
 	}
 
-	public int copyObject(SvmClass clazz, Map<Integer, Integer> remap, Queue<Integer> queue, byte[] current, int currentNext, int processp, int endp, int fields) {
+	public int copyObject(Queue<Integer> queue, byte[] current, int currentNext, int processp, int endp, int fields) {
 		// copy header
 		copyToNewSpace(getSpace(), current, currentNext, processp, OBJECT_HEADER_BYTES);
+		// reset GC state
+		Utils.setGCState(current, currentNext, -1);
 
 		for (int j = 0; j < fields; j++) {
 			//SvmField field = clazz.fields[j];
 			byte[] val = Utils.getObjectFieldValue(getSpace(), processp, j);
-			if (val[SvmType.STORED_TYPE_BYTE_SIZE - 1] == SvmType.POINTER.getIdentByte()) {
-				int fieldPointer = Utils.byteArrayToInt(val, 0);
+			if (Utils.isPointer(val[SvmType.TYPE_BYTE_SIZE - 1])) {
+				int fieldPointer = Utils.convertSVMTypeToInt(Utils.byteArrayToInt(val, 0));
+
+				if (fieldPointer == 1979) {
+					System.out.println("AA");
+				}
 
 				if (fieldPointer == 0) {
 					// null pointer
@@ -195,9 +209,11 @@ public class SvmHeap {
 					continue;
 				}
 
-				Integer mp = remap.get(fieldPointer);
-				if (mp != null) {
-					Utils.setObjectFieldPointerValue(current, currentNext, j, mp);
+				//Integer mp = remap.get(fieldPointer);
+				//if (mp != null) {
+				int gcState = Utils.getGCState(getSpace(), fieldPointer);
+				if (gcState != -1) {
+					Utils.setObjectFieldPointerValue(current, currentNext, j, gcState);
 				} else {
 					queue.add(fieldPointer);
 

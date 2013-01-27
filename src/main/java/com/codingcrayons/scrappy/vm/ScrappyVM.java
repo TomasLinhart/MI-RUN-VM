@@ -40,7 +40,7 @@ public class ScrappyVM {
 		int address = heap.alloc(permGenSpace.getClass("EntryPoint"));
 
 		int start = instructionList.addInstruction("ppush " + 0);
-		instructionList.addInstruction("ipush " + address);
+		instructionList.addInstruction("ppush " + address);
 		instructionList.addInstruction("invokevirtual Entry:Array");
 		instructionList.addInstruction(null);
 		instructionList.jump(start);

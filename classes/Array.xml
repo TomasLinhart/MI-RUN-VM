@@ -4,7 +4,7 @@
 		<methods>
 			<method name="size:" type="Integer">
 				<instructions>
-					<instruction>iload 0</instruction>
+					<instruction>pload 0</instruction>
 					<instruction>syscall 12</instruction>
 					<instruction>ireturn</instruction>
 				</instructions>

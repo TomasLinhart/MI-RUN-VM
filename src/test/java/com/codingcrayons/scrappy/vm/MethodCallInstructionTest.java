@@ -108,40 +108,45 @@ public class MethodCallInstructionTest {
 
 		assertEquals(vm.instructionList.getPc(), vm.permGenSpace.getClass("Test1").lookup("test1:").instructionPointer + 1);
 
-		byte[] valA = Utils.intToByteArray(a);
-		byte[] valB = Utils.intToByteArray(b);
+		byte[] valA = Utils.intToByteArray(Utils.createSVMInt(a));
+		byte[] valB = Utils.intToByteArray(Utils.createSVMPointer(b));
 
 		assertEquals(vm.stack.getCurrentStackFrameIndex(), 1);
 		// object pointer
 		assertEquals(vm.stack.getLocalPointer(0), 1);
 		// arg 1 - local 1
-		assertEquals(vm.stack.getLocalValue(1), new byte[] { valA[0], valA[1], valA[2], valA[3], SvmType.INT.getIdentByte() });
+		assertEquals(vm.stack.getLocalValue(1), new byte[] { valA[0], valA[1], valA[2], valA[3] });
 		// arg 2 - local 2
-		assertEquals(vm.stack.getLocalValue(2), new byte[] { valB[0], valB[1], valB[2], valB[3], SvmType.POINTER.getIdentByte() });
+		assertEquals(vm.stack.getLocalValue(2), new byte[] { valB[0], valB[1], valB[2], valB[3] });
 
 		vm.stack.setLocalInt(1, a2);
 		vm.stack.setLocalPointer(2, b2);
 		vm.stack.setLocalInt(3, c);
 		vm.stack.setLocalPointer(4, d);
 
-		valA = Utils.intToByteArray(a2);
-		valB = Utils.intToByteArray(b2);
-		byte[] valC = Utils.intToByteArray(c);
-		byte[] valD = Utils.intToByteArray(d);
+		valA = Utils.intToByteArray(Utils.createSVMInt(a2));
+		valB = Utils.intToByteArray(Utils.createSVMPointer(b2));
+		byte[] valC = Utils.intToByteArray(Utils.createSVMInt(c));
+		byte[] valD = Utils.intToByteArray(Utils.createSVMPointer(d));
 
-		assertEquals(vm.stack.getLocalValue(1), new byte[] { valA[0], valA[1], valA[2], valA[3], SvmType.INT.getIdentByte() });
-		assertEquals(vm.stack.getLocalValue(2), new byte[] { valB[0], valB[1], valB[2], valB[3], SvmType.POINTER.getIdentByte() });
-		assertEquals(vm.stack.getLocalValue(3), new byte[] { valC[0], valC[1], valC[2], valC[3], SvmType.INT.getIdentByte() });
-		assertEquals(vm.stack.getLocalValue(4), new byte[] { valD[0], valD[1], valD[2], valD[3], SvmType.POINTER.getIdentByte() });
+		assertEquals(vm.stack.getLocalValue(1), new byte[] { valA[0], valA[1], valA[2], valA[3] });
+		assertEquals(vm.stack.getLocalValue(2), new byte[] { valB[0], valB[1], valB[2], valB[3] });
+		assertEquals(vm.stack.getLocalValue(3), new byte[] { valC[0], valC[1], valC[2], valC[3] });
+		assertEquals(vm.stack.getLocalValue(4), new byte[] { valD[0], valD[1], valD[2], valD[3] });
 
-		byte[] valE = new byte[] { 1, 2, 3, 4, 0 };
-		byte[] valF = new byte[] { 1, 2, 3, 4, 1 };
+		assertEquals(vm.stack.getLocalInt(1), a2);
+		assertEquals(vm.stack.getLocalPointer(2), b2);
+		assertEquals(vm.stack.getLocalInt(3), c);
+		assertEquals(vm.stack.getLocalPointer(4), d);
+
+		byte[] valE = new byte[] { 1, 2, 3, 4 };
+		byte[] valF = new byte[] { 1, 2, 3, 4 };
 
 		vm.stack.setLocalValue(1, valE);
 		vm.stack.setLocalValue(2, valF);
 
-		assertEquals(vm.stack.getLocalValue(1), new byte[] { valE[0], valE[1], valE[2], valE[3], valE[4] });
-		assertEquals(vm.stack.getLocalValue(2), new byte[] { valF[0], valF[1], valF[2], valF[3], valF[4] });
+		assertEquals(vm.stack.getLocalValue(1), new byte[] { valE[0], valE[1], valE[2], valE[3] });
+		assertEquals(vm.stack.getLocalValue(2), new byte[] { valF[0], valF[1], valF[2], valF[3] });
 
 		is = vm.instructionList.addInstruction("ipush " + a2);
 		vm.instructionList.addInstruction("istore 1");
@@ -174,12 +179,11 @@ public class MethodCallInstructionTest {
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
-		valE = Utils.intToByteArray(a2);
-		valF = Utils.intToByteArray(b2);
+		valE = Utils.intToByteArray(Utils.createSVMInt(a2));
+		valF = Utils.intToByteArray(Utils.createSVMPointer(b2));
 
-		assertEquals(vm.stack.popValue(), new byte[] { valF[0], valF[1], valF[2], valF[3], SvmType.POINTER.getIdentByte() });
-		assertEquals(vm.stack.popValue(), new byte[] { valE[0], valE[1], valE[2], valE[3], SvmType.INT.getIdentByte() });
-
+		assertEquals(vm.stack.popValue(), new byte[] { valF[0], valF[1], valF[2], valF[3] });
+		assertEquals(vm.stack.popValue(), new byte[] { valE[0], valE[1], valE[2], valE[3] });
 	}
 
 	@Test
@@ -217,11 +221,17 @@ public class MethodCallInstructionTest {
 		Interpreter.interpret(vm);
 
 		byte[] retval = vm.stack.popValue();
-		byte[] val = Utils.intToByteArray(5);
+		byte[] val;
+		if (type == SvmType.INT.getIdentByte()) {
+			val = Utils.intToByteArray(Utils.createSVMInt(5));
+		} else {
+			val = Utils.intToByteArray(Utils.createSVMPointer(5));
+		}
 
 		assertEquals(vm.stack.getCurrentStackFrameIndex(), 0);
 		assertEquals(vm.instructionList.getPc(), is + 3);
-		assertEquals(retval, new byte[] { val[0], val[1], val[2], val[3], type });
+		assertEquals(retval, new byte[] { val[0], val[1], val[2], val[3]});
+		assertEquals(Utils.isPointer(retval[3]), type ==  SvmType.POINTER.getIdentByte());
 	}
 
 }
