@@ -41,7 +41,7 @@ public class ScrappyVM {
 
 		int start = instructionList.addInstruction("ppush " + 0);
 		instructionList.addInstruction("ppush " + address);
-		instructionList.addInstruction("invokevirtual Entry:Array");
+		instructionList.addInstruction("invokevirtual ::Entry::1");
 		instructionList.addInstruction(null);
 		instructionList.jump(start);
 	}

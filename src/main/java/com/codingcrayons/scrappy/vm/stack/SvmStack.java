@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 
 import com.codingcrayons.scrappy.vm.exceptions.StackException;
 import com.codingcrayons.scrappy.vm.exceptions.StackOverflowException;
+import com.codingcrayons.scrappy.vm.permgen.LookupReturn;
 import com.codingcrayons.scrappy.vm.permgen.SvmMethod;
 import com.codingcrayons.scrappy.vm.permgen.SvmType;
 import com.codingcrayons.scrappy.vm.util.Utils;
@@ -20,7 +21,7 @@ public class SvmStack {
 			next = 0;
 		}
 
-		public StackFrame(StackFrame prevSF, int size, int returnAddress, int objPointer, SvmMethod method) throws StackOverflowException, StackException {
+		public StackFrame(StackFrame prevSF, int size, int returnAddress, int objPointer, LookupReturn lr) throws StackOverflowException, StackException {
 			stackSpace = new byte[size];
 			next = 0;
 
@@ -32,11 +33,11 @@ public class SvmStack {
 			pushPointer(objPointer);
 
 			// 1 - n (args + other locals)
-			next += (method.arguments.length + method.locals.length) * SvmType.TYPE_BYTE_SIZE;
+			next += (lr.method.arguments.length + lr.method.locals.length) * SvmType.TYPE_BYTE_SIZE;
 
 			// current frame is the caller frame
-			for (int i = method.arguments.length - 1; i >= 0; i--) {
-				setLocalValue(1 + i, prevSF.popValue());
+			for (int i = 0; i < lr.args.length; i++) {
+				setLocalValue(1 + i, lr.args[i]);
 			}
 
 		}
@@ -134,11 +135,11 @@ public class SvmStack {
 		stackFrames[csfIndex] = new StackFrame(128);
 	}
 
-	public void beginStackFrame(int returnAddress, int objPointer, SvmMethod method) throws StackOverflowException, StackException {
+	public void beginStackFrame(int returnAddress, int objPointer, LookupReturn lr) throws StackOverflowException, StackException {
 		if (csfIndex == stackFrames.length - 1) {
 			throw new StackOverflowException();
 		}
-		StackFrame frame = new StackFrame(currentStackFrame(), stackFrameSize, returnAddress, objPointer, method);
+		StackFrame frame = new StackFrame(currentStackFrame(), stackFrameSize, returnAddress, objPointer, lr);
 		stackFrames[++csfIndex] = frame;
 	}
 

@@ -2,7 +2,16 @@
 <classes>
 	<class name="Array">
 		<methods>
-			<method name="size:" type="Integer">
+			<method name="New" type="Any">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="size" type="Integer">
 				<instructions>
 					<instruction>pload 0</instruction>
 					<instruction>syscall 12</instruction>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <classes>
-	<class name="List">
+	<class name="List" parentName="Any">
 		<fields>
 			<field name="Length" type="Integer" />
-			<field name="ArrayPointer" type="Integer" />
+			<field name="ArrayPointer" type="Array" />
 		</fields>
 		<methods>
-			<method name="New:" type="List">
+			<method name="New" type="List">
 				<args>
 				</args>
 				<locals>
@@ -14,13 +14,13 @@
 				</locals>
 				<instructions>
 					<instruction>getfield 1</instruction> <!-- Line: 8 emit "getfield 1" -->
-					<instruction>invokevirtual size:</instruction> <!-- Line: 9 emit "invokevirtual size:" -->
+					<instruction>invokevirtual ::size::0</instruction> <!-- Line: 9 emit "invokevirtual ::size::0" -->
 					<instruction>vload 0</instruction> <!-- Line: 10 emit "vload 0" -->
 					<instruction>setfield 0</instruction> <!-- Line: 11 emit "setfield 0" -->
 					<instruction>return</instruction> <!-- Line: 12 emit "return" -->
 				</instructions>
 			</method>
-			<method name="New:Integer" type="List">
+			<method name="New" type="List">
 				<args>
 					<arg name="size" type="Integer" />
 				</args>
@@ -38,7 +38,7 @@
 					<instruction>return</instruction> <!-- Line: 23 emit "return" -->
 				</instructions>
 			</method>
-			<method name="SetAt:Integer:Any" type="Unit">
+			<method name="SetAt" type="Unit">
 				<args>
 					<arg name="index" type="Integer" />
 					<arg name="item" type="Any" />
@@ -64,7 +64,7 @@
 					<instruction>return</instruction> <!-- Added by compiler -->
 				</instructions>
 			</method>
-			<method name="At:Integer" type="Any">
+			<method name="At" type="Any">
 				<args>
 					<arg name="index" type="Integer" />
 				</args>
@@ -79,7 +79,7 @@
 					<instruction>vreturn</instruction> <!-- Line: 41 emit "vreturn" -->
 				</instructions>
 			</method>
-			<method name="Copy:" type="Unit">
+			<method name="Copy" type="Unit">
 				<args>
 				</args>
 				<locals>
@@ -93,7 +93,7 @@
 					<instruction>new List</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - creating new instance -->
 					<instruction>vstore 3</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - storing in tmp variable -->
 					<instruction>vload 3</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - doing method call -->
+					<instruction>invokevirtual ::New::1</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - doing method call -->
 					<instruction>vload 3</instruction> <!-- Line: 45 let newList : List = List#New(@Length) - loading from tmp variable -->
 					<instruction>vstore 1</instruction> <!-- Line: 45 let newList : List = List#New(@Length) -->
 					<instruction>ipush 0</instruction> <!-- Line: 47 let i : Integer = 0 -->
@@ -110,9 +110,9 @@
 					<instruction>vload 2</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) -->
 					<instruction>vload 2</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) -->
 					<instruction>vload 0</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) - loading self -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) - doing method call -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) - doing method call -->
 					<instruction>vload 1</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) -->
-					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) - doing method call -->
+					<instruction>invokevirtual ::SetAt::2</instruction> <!-- Line: 49 newList#SetAt(i, At(i)) - doing method call -->
 					<instruction>vload 2</instruction> <!-- Line: 50 i = i + 1 -->
 					<instruction>ipush 1</instruction> <!-- Line: 50 i = i + 1 -->
 					<instruction>iadd</instruction> <!-- Line: 50 i = i + 1 -->
@@ -124,11 +124,20 @@
 			</method>
 		</methods>
 	</class>
-	<class name="EntryPoint">
+	<class name="EntryPoint" parentName="Any">
 		<fields>
 		</fields>
 		<methods>
-			<method name="Entry:Array" type="Unit">
+			<method name="New" type="EntryPoint">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="Entry" type="Unit">
 				<args>
 					<arg name="args" type="Array" />
 				</args>
@@ -160,22 +169,24 @@
 					<instruction>new FileReader</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() - loading from tmp variable -->
+					<instruction>invokevirtual ::New::0</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() - doing method call -->
+					<instruction>vload 23</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() - loading from tmp variable -->
 					<instruction>vstore 2</instruction> <!-- Line: 65 let reader : FileReader = FileReader#New() -->
 					<instruction>newstring #data.txt</instruction> <!-- Line: 66 reader#open("data.txt") -->
 					<instruction>vload 2</instruction> <!-- Line: 66 reader#open("data.txt") -->
-					<instruction>invokevirtual open:String</instruction> <!-- Line: 66 reader#open("data.txt") - doing method call -->
+					<instruction>invokevirtual ::open::1</instruction> <!-- Line: 66 reader#open("data.txt") - doing method call -->
 					<instruction>vload 2</instruction> <!-- Line: 67 let line : String = reader#readLine() -->
-					<instruction>invokevirtual readLine:</instruction> <!-- Line: 67 let line : String = reader#readLine() - doing method call -->
+					<instruction>invokevirtual ::readLine::0</instruction> <!-- Line: 67 let line : String = reader#readLine() - doing method call -->
 					<instruction>vstore 3</instruction> <!-- Line: 67 let line : String = reader#readLine() -->
 					<instruction>vload 3</instruction> <!-- Line: 68 let parts : Array = line#split() -->
-					<instruction>invokevirtual split:</instruction> <!-- Line: 68 let parts : Array = line#split() - doing method call -->
+					<instruction>invokevirtual ::split::0</instruction> <!-- Line: 68 let parts : Array = line#split() - doing method call -->
 					<instruction>vstore 4</instruction> <!-- Line: 68 let parts : Array = line#split() -->
 					<instruction>vload 4</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) -->
-					<instruction>invokevirtual size:</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - doing method call -->
+					<instruction>invokevirtual ::size::0</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - doing method call -->
 					<instruction>new List</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - doing method call -->
+					<instruction>invokevirtual ::New::1</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - doing method call -->
 					<instruction>vload 23</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) - loading from tmp variable -->
 					<instruction>vstore 5</instruction> <!-- Line: 69 let listParts : List = List#New(parts#size()) -->
 					<instruction>vload 4</instruction> <!-- Line: 70 listParts@ArrayPointer = parts -->
@@ -183,23 +194,23 @@
 					<instruction>setfield 1</instruction> <!-- Line: 70 listParts@ArrayPointer = parts - setting field on expression -->
 					<instruction>ipush 0</instruction> <!-- Line: 72 let itemsCountString : String = (String) listParts#At(0) -->
 					<instruction>vload 5</instruction> <!-- Line: 72 let itemsCountString : String = (String) listParts#At(0) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 72 let itemsCountString : String = (String) listParts#At(0) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 72 let itemsCountString : String = (String) listParts#At(0) -->
 					<instruction>vstore 6</instruction> <!-- Line: 72 let itemsCountString : String = (String) listParts#At(0) -->
 					<instruction>ipush 1</instruction> <!-- Line: 73 let capacityString : String = (String) listParts#At(1) -->
 					<instruction>vload 5</instruction> <!-- Line: 73 let capacityString : String = (String) listParts#At(1) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 73 let capacityString : String = (String) listParts#At(1) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 73 let capacityString : String = (String) listParts#At(1) -->
 					<instruction>vstore 7</instruction> <!-- Line: 73 let capacityString : String = (String) listParts#At(1) -->
 					<instruction>vload 6</instruction> <!-- Line: 74 let itemsCount : Integer = itemsCountString#toInteger() -->
-					<instruction>invokevirtual toInteger:</instruction> <!-- Line: 74 let itemsCount : Integer = itemsCountString#toInteger() - doing method call -->
+					<instruction>invokevirtual ::toInteger::0</instruction> <!-- Line: 74 let itemsCount : Integer = itemsCountString#toInteger() - doing method call -->
 					<instruction>vstore 8</instruction> <!-- Line: 74 let itemsCount : Integer = itemsCountString#toInteger() -->
 					<instruction>vload 7</instruction> <!-- Line: 75 let capacity : Integer = capacityString#toInteger() -->
-					<instruction>invokevirtual toInteger:</instruction> <!-- Line: 75 let capacity : Integer = capacityString#toInteger() - doing method call -->
+					<instruction>invokevirtual ::toInteger::0</instruction> <!-- Line: 75 let capacity : Integer = capacityString#toInteger() - doing method call -->
 					<instruction>vstore 9</instruction> <!-- Line: 75 let capacity : Integer = capacityString#toInteger() -->
 					<instruction>vload 8</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) -->
 					<instruction>new List</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - doing method call -->
+					<instruction>invokevirtual ::New::1</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - doing method call -->
 					<instruction>vload 23</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) - loading from tmp variable -->
 					<instruction>vstore 10</instruction> <!-- Line: 76 let items : List = List#New(itemsCount) -->
 					<instruction>vload 8</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) -->
@@ -208,7 +219,7 @@
 					<instruction>new Instance</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer:Integer:List</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - doing method call -->
+					<instruction>invokevirtual ::New::3</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - doing method call -->
 					<instruction>vload 23</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) - loading from tmp variable -->
 					<instruction>vstore 11</instruction> <!-- Line: 77 let instance : Instance = Instance#New(itemsCount, capacity, items) -->
 					<instruction>ipush 2</instruction> <!-- Line: 78 let i : Integer = 2 -->
@@ -218,7 +229,7 @@
 					<instruction>ipush 1</instruction> <!-- Line: 81 while (i < parts#size()) -->
 					<instruction>vload 12</instruction> <!-- Line: 81 while (i < parts#size()) -->
 					<instruction>vload 4</instruction> <!-- Line: 81 while (i < parts#size()) -->
-					<instruction>invokevirtual size:</instruction> <!-- Line: 81 while (i < parts#size()) - doing method call -->
+					<instruction>invokevirtual ::size::0</instruction> <!-- Line: 81 while (i < parts#size()) - doing method call -->
 					<instruction>iflt 3</instruction>
 					<instruction>ipush 1</instruction> <!-- Line: 81 while (i < parts#size()) -->
 					<instruction>jump 2</instruction>
@@ -226,32 +237,32 @@
 					<instruction>ifeq 38</instruction>
 					<instruction>vload 12</instruction> <!-- Line: 82 let weightString : String = (String) listParts#At(i) -->
 					<instruction>vload 5</instruction> <!-- Line: 82 let weightString : String = (String) listParts#At(i) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 82 let weightString : String = (String) listParts#At(i) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 82 let weightString : String = (String) listParts#At(i) -->
 					<instruction>vstore 14</instruction> <!-- Line: 82 let weightString : String = (String) listParts#At(i) -->
 					<instruction>vload 12</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
 					<instruction>ipush 1</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
 					<instruction>iadd</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
 					<instruction>vload 5</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
 					<instruction>vstore 15</instruction> <!-- Line: 83 let priceString  : String = (String) listParts#At(i + 1) -->
 					<instruction>vload 14</instruction> <!-- Line: 84 let weight : Integer = weightString#toInteger() -->
-					<instruction>invokevirtual toInteger:</instruction> <!-- Line: 84 let weight : Integer = weightString#toInteger() - doing method call -->
+					<instruction>invokevirtual ::toInteger::0</instruction> <!-- Line: 84 let weight : Integer = weightString#toInteger() - doing method call -->
 					<instruction>vstore 16</instruction> <!-- Line: 84 let weight : Integer = weightString#toInteger() -->
 					<instruction>vload 15</instruction> <!-- Line: 85 let price : Integer = priceString#toInteger() -->
-					<instruction>invokevirtual toInteger:</instruction> <!-- Line: 85 let price : Integer = priceString#toInteger() - doing method call -->
+					<instruction>invokevirtual ::toInteger::0</instruction> <!-- Line: 85 let price : Integer = priceString#toInteger() - doing method call -->
 					<instruction>vstore 17</instruction> <!-- Line: 85 let price : Integer = priceString#toInteger() -->
 					<instruction>vload 16</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) -->
 					<instruction>vload 17</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) -->
 					<instruction>new Item</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer:Integer</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - doing method call -->
+					<instruction>invokevirtual ::New::2</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - doing method call -->
 					<instruction>vload 23</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) - loading from tmp variable -->
 					<instruction>vstore 18</instruction> <!-- Line: 86 let item : Item = Item#New(weight, price) -->
 					<instruction>vload 13</instruction> <!-- Line: 87 items#SetAt(j, item) -->
 					<instruction>vload 18</instruction> <!-- Line: 87 items#SetAt(j, item) -->
 					<instruction>vload 10</instruction> <!-- Line: 87 items#SetAt(j, item) -->
-					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 87 items#SetAt(j, item) - doing method call -->
+					<instruction>invokevirtual ::SetAt::2</instruction> <!-- Line: 87 items#SetAt(j, item) - doing method call -->
 					<instruction>vload 12</instruction> <!-- Line: 88 i = i + 2 -->
 					<instruction>ipush 2</instruction> <!-- Line: 88 i = i + 2 -->
 					<instruction>iadd</instruction> <!-- Line: 88 i = i + 2 -->
@@ -265,11 +276,11 @@
 					<instruction>new Solver</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - loading from tmp variable -->
-					<instruction>invokevirtual New:Instance</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - doing method call -->
+					<instruction>invokevirtual ::New::1</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - doing method call -->
 					<instruction>vload 23</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) - loading from tmp variable -->
 					<instruction>vstore 19</instruction> <!-- Line: 92 let solver : Solver = Solver#New(instance) -->
 					<instruction>vload 19</instruction> <!-- Line: 93 let bestSolution : List = solver#Solve() -->
-					<instruction>invokevirtual Solve:</instruction> <!-- Line: 93 let bestSolution : List = solver#Solve() - doing method call -->
+					<instruction>invokevirtual ::Solve::0</instruction> <!-- Line: 93 let bestSolution : List = solver#Solve() - doing method call -->
 					<instruction>vstore 20</instruction> <!-- Line: 93 let bestSolution : List = solver#Solve() -->
 					<instruction>ipush 0</instruction> <!-- Line: 95 i = 0 -->
 					<instruction>vstore 12</instruction> <!-- Line: 95 i = 0 - assigning variable -->
@@ -278,7 +289,7 @@
 					<instruction>vload 19</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) -->
 					<instruction>getfield 2</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) -->
 					<instruction>vload 21</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) -->
-					<instruction>invokevirtual append:Integer</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) - doing method call -->
+					<instruction>invokevirtual ::append::1</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) - doing method call -->
 					<instruction>vstore 21</instruction> <!-- Line: 97 result = result#append(solver@BestPrice) - assigning variable -->
 					<instruction>ipush 1</instruction> <!-- Line: 98 while (i < bestSolution@Length) -->
 					<instruction>vload 12</instruction> <!-- Line: 98 while (i < bestSolution@Length) -->
@@ -291,13 +302,13 @@
 					<instruction>ifeq 16</instruction>
 					<instruction>newstring # </instruction> <!-- Line: 99 result = result#append(" ") -->
 					<instruction>vload 21</instruction> <!-- Line: 99 result = result#append(" ") -->
-					<instruction>invokevirtual append:String</instruction> <!-- Line: 99 result = result#append(" ") - doing method call -->
+					<instruction>invokevirtual ::append::1</instruction> <!-- Line: 99 result = result#append(" ") - doing method call -->
 					<instruction>vstore 21</instruction> <!-- Line: 99 result = result#append(" ") - assigning variable -->
 					<instruction>vload 12</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) -->
 					<instruction>vload 20</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) -->
 					<instruction>vload 21</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) -->
-					<instruction>invokevirtual append:Integer</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) - doing method call -->
+					<instruction>invokevirtual ::append::1</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) - doing method call -->
 					<instruction>vstore 21</instruction> <!-- Line: 100 result = result#append((Integer) bestSolution#At(i)) - assigning variable -->
 					<instruction>vload 12</instruction> <!-- Line: 101 i = i + 1 -->
 					<instruction>ipush 1</instruction> <!-- Line: 101 i = i + 1 -->
@@ -307,29 +318,40 @@
 					<instruction>new FileWriter</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() - creating new instance -->
 					<instruction>vstore 23</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() - storing in tmp variable -->
 					<instruction>vload 23</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() - loading from tmp variable -->
+					<instruction>invokevirtual ::New::0</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() - doing method call -->
+					<instruction>vload 23</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() - loading from tmp variable -->
 					<instruction>vstore 22</instruction> <!-- Line: 104 let writer : FileWriter = FileWriter#New() -->
 					<instruction>newstring #result.txt</instruction> <!-- Line: 105 writer#open("result.txt") -->
 					<instruction>vload 22</instruction> <!-- Line: 105 writer#open("result.txt") -->
-					<instruction>invokevirtual open:String</instruction> <!-- Line: 105 writer#open("result.txt") - doing method call -->
+					<instruction>invokevirtual ::open::1</instruction> <!-- Line: 105 writer#open("result.txt") - doing method call -->
 					<instruction>vload 21</instruction> <!-- Line: 106 writer#writeLine(result) -->
 					<instruction>vload 22</instruction> <!-- Line: 106 writer#writeLine(result) -->
-					<instruction>invokevirtual writeLine:String</instruction> <!-- Line: 106 writer#writeLine(result) - doing method call -->
+					<instruction>invokevirtual ::writeLine::1</instruction> <!-- Line: 106 writer#writeLine(result) - doing method call -->
 					<instruction>vload 2</instruction> <!-- Line: 108 reader#close() -->
-					<instruction>invokevirtual close:</instruction> <!-- Line: 108 reader#close() - doing method call -->
+					<instruction>invokevirtual ::close::0</instruction> <!-- Line: 108 reader#close() - doing method call -->
 					<instruction>vload 22</instruction> <!-- Line: 109 writer#close() -->
-					<instruction>invokevirtual close:</instruction> <!-- Line: 109 writer#close() - doing method call -->
+					<instruction>invokevirtual ::close::0</instruction> <!-- Line: 109 writer#close() - doing method call -->
 					<instruction>return</instruction> <!-- Added by compiler -->
 				</instructions>
 			</method>
 		</methods>
 	</class>
-	<class name="Item">
+	<class name="Item" parentName="Any">
 		<fields>
 			<field name="Weight" type="Integer" />
 			<field name="Price" type="Integer" />
 		</fields>
 		<methods>
-			<method name="New:Integer:Integer" type="Item">
+			<method name="New" type="Item">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="New" type="Item">
 				<args>
 					<arg name="weight" type="Integer" />
 					<arg name="price" type="Integer" />
@@ -349,14 +371,23 @@
 			</method>
 		</methods>
 	</class>
-	<class name="Instance">
+	<class name="Instance" parentName="Any">
 		<fields>
 			<field name="Quantity" type="Integer" />
 			<field name="Capacity" type="Integer" />
 			<field name="Items" type="List" />
 		</fields>
 		<methods>
-			<method name="New:Integer:Integer:List" type="Instance">
+			<method name="New" type="Instance">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="New" type="Instance">
 				<args>
 					<arg name="quantity" type="Integer" />
 					<arg name="capacity" type="Integer" />
@@ -380,7 +411,7 @@
 			</method>
 		</methods>
 	</class>
-	<class name="Solver">
+	<class name="Solver" parentName="Any">
 		<fields>
 			<field name="Instance" type="Instance" />
 			<field name="Items" type="List" />
@@ -388,7 +419,16 @@
 			<field name="BestSolution" type="List" />
 		</fields>
 		<methods>
-			<method name="New:Instance" type="Solver">
+			<method name="New" type="Solver">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="New" type="Solver">
 				<args>
 					<arg name="instance" type="Instance" />
 				</args>
@@ -406,7 +446,7 @@
 					<instruction>return</instruction> <!-- Added by compiler -->
 				</instructions>
 			</method>
-			<method name="Solve:" type="Unit">
+			<method name="Solve" type="Unit">
 				<args>
 				</args>
 				<locals>
@@ -420,7 +460,7 @@
 					<instruction>new List</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - creating new instance -->
 					<instruction>vstore 2</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - storing in tmp variable -->
 					<instruction>vload 2</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - loading from tmp variable -->
-					<instruction>invokevirtual New:Integer</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - doing method call -->
+					<instruction>invokevirtual ::New::1</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - doing method call -->
 					<instruction>vload 2</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) - loading from tmp variable -->
 					<instruction>vstore 1</instruction> <!-- Line: 147 let array : List = List#New(@Instance@Quantity) -->
 					<instruction>vload 1</instruction> <!-- Line: 148 @BestSolution = array -->
@@ -432,13 +472,13 @@
 					<instruction>vload 1</instruction> <!-- Line: 151 SolveRecursive(array, 0) -->
 					<instruction>ipush 0</instruction> <!-- Line: 151 SolveRecursive(array, 0) -->
 					<instruction>vload 0</instruction> <!-- Line: 151 SolveRecursive(array, 0) - loading self -->
-					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 151 SolveRecursive(array, 0) - doing method call -->
+					<instruction>invokevirtual ::SolveRecursive::2</instruction> <!-- Line: 151 SolveRecursive(array, 0) - doing method call -->
 					<instruction>vload 0</instruction> <!-- Line: 153 return @BestSolution -->
 					<instruction>getfield 3</instruction> <!-- Line: 153 return @BestSolution -->
 					<instruction>vreturn</instruction> <!-- Line: 153 return @BestSolution -->
 				</instructions>
 			</method>
-			<method name="SolveRecursive:List:Integer" type="Unit">
+			<method name="SolveRecursive" type="Unit">
 				<args>
 					<arg name="array" type="List" />
 					<arg name="position" type="Integer" />
@@ -489,7 +529,7 @@
 					<instruction>ipush 1</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
 					<instruction>vload 5</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
 					<instruction>vload 1</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
 					<instruction>ipush 1</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
 					<instruction>ifeq 3</instruction>
 					<instruction>ipush 1</instruction> <!-- Line: 167 if ((Integer) array#At(i) == YES) -->
@@ -499,7 +539,7 @@
 					<instruction>vload 5</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
 					<instruction>vload 0</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
 					<instruction>getfield 1</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
-					<instruction>invokevirtual At:Integer</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
+					<instruction>invokevirtual ::At::1</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
 					<instruction>vstore 6</instruction> <!-- Line: 168 let item : Item = (Item) @Items#At(i) -->
 					<instruction>vload 3</instruction> <!-- Line: 169 totalPrice = totalPrice + item@Price -->
 					<instruction>vload 6</instruction> <!-- Line: 169 totalPrice = totalPrice + item@Price -->
@@ -535,7 +575,7 @@
 					<instruction>iand</instruction> <!-- Line: 177 if (totalWeight <= @Instance@Capacity && totalPrice > @BestPrice) -->
 					<instruction>ifeq 8</instruction>
 					<instruction>vload 1</instruction> <!-- Line: 178 @BestSolution = array#Copy() -->
-					<instruction>invokevirtual Copy:</instruction> <!-- Line: 178 @BestSolution = array#Copy() - doing method call -->
+					<instruction>invokevirtual ::Copy::0</instruction> <!-- Line: 178 @BestSolution = array#Copy() - doing method call -->
 					<instruction>vload 0</instruction> <!-- Line: 178 @BestSolution = array#Copy() - setting field -->
 					<instruction>setfield 3</instruction> <!-- Line: 178 @BestSolution = array#Copy() - setting field -->
 					<instruction>vload 3</instruction> <!-- Line: 179 @BestPrice = totalPrice -->
@@ -545,23 +585,23 @@
 					<instruction>vload 2</instruction> <!-- Line: 185 array#SetAt(position, NO) -->
 					<instruction>ipush 0</instruction> <!-- Line: 185 array#SetAt(position, NO) -->
 					<instruction>vload 1</instruction> <!-- Line: 185 array#SetAt(position, NO) -->
-					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 185 array#SetAt(position, NO) - doing method call -->
+					<instruction>invokevirtual ::SetAt::2</instruction> <!-- Line: 185 array#SetAt(position, NO) - doing method call -->
 					<instruction>vload 1</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) -->
 					<instruction>vload 2</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) -->
 					<instruction>ipush 1</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) -->
 					<instruction>iadd</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) -->
 					<instruction>vload 0</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) - loading self -->
-					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) - doing method call -->
+					<instruction>invokevirtual ::SolveRecursive::2</instruction> <!-- Line: 186 SolveRecursive(array, position + 1) - doing method call -->
 					<instruction>vload 2</instruction> <!-- Line: 187 array#SetAt(position, YES) -->
 					<instruction>ipush 1</instruction> <!-- Line: 187 array#SetAt(position, YES) -->
 					<instruction>vload 1</instruction> <!-- Line: 187 array#SetAt(position, YES) -->
-					<instruction>invokevirtual SetAt:Integer:Any</instruction> <!-- Line: 187 array#SetAt(position, YES) - doing method call -->
+					<instruction>invokevirtual ::SetAt::2</instruction> <!-- Line: 187 array#SetAt(position, YES) - doing method call -->
 					<instruction>vload 1</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) -->
 					<instruction>vload 2</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) -->
 					<instruction>ipush 1</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) -->
 					<instruction>iadd</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) -->
 					<instruction>vload 0</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) - loading self -->
-					<instruction>invokevirtual SolveRecursive:List:Integer</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) - doing method call -->
+					<instruction>invokevirtual ::SolveRecursive::2</instruction> <!-- Line: 188 SolveRecursive(array, position + 1) - doing method call -->
 					<instruction>return</instruction> <!-- Added by compiler -->
 				</instructions>
 			</method>

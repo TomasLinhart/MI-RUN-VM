@@ -5,7 +5,16 @@
 			<field name="writerReference" type="Integer" />
 		</fields>
 		<methods>
-			<method name="open:String" type="void">
+			<method name="New" type="Any">
+				<args>
+				</args>
+				<locals>
+				</locals>
+				<instructions>
+					<instruction>return</instruction> <!-- Added by compiler -->
+				</instructions>
+			</method>
+			<method name="open" type="void">
 				<args>
 					<arg name="s" type="String" />
 				</args>
@@ -17,7 +26,7 @@
 					<instruction>return</instruction>
 				</instructions>
 			</method>
-			<method name="writeLine:String" type="void">
+			<method name="writeLine" type="void">
 				<args>
 					<arg name="s" type="String" />
 				</args>
@@ -29,7 +38,7 @@
 					<instruction>return</instruction>
 				</instructions>
 			</method>
-			<method name="close:" type="void">
+			<method name="close" type="void">
 				<instructions>
 					<instruction>getfield 0</instruction>
 					<instruction>syscall 9</instruction>

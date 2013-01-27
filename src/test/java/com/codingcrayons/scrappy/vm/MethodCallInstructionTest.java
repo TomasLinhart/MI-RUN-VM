@@ -29,16 +29,16 @@ public class MethodCallInstructionTest {
 		int is = vm.instructionList.addInstruction(null);
 
 		SvmMethod mA = new SvmMethod(
-				"test1:",
-				new SvmField[] { new SvmField("A", SvmType.INT), new SvmField("B", SvmType.POINTER) },
-				new SvmField[] { new SvmField("C", SvmType.INT), new SvmField("D", SvmType.POINTER) },
+				"test1",
+				new SvmField[] { new SvmField("A", SvmType.INT, "Integer"), new SvmField("B", SvmType.POINTER, "Test1") },
+				new SvmField[] { new SvmField("C", SvmType.INT, "Integer"), new SvmField("D", SvmType.POINTER, "Test1") },
 				SvmType.VOID,
 				is);
 
 		is = vm.instructionList.addInstruction("return");
 
 		SvmMethod mB = new SvmMethod(
-				"retVoid:",
+				"retVoid",
 				new SvmField[] {},
 				new SvmField[] {},
 				SvmType.VOID,
@@ -48,7 +48,7 @@ public class MethodCallInstructionTest {
 		vm.instructionList.addInstruction("ireturn");
 
 		SvmMethod mC = new SvmMethod(
-				"retInt:",
+				"retInt",
 				new SvmField[] {},
 				new SvmField[] {},
 				SvmType.INT,
@@ -58,7 +58,7 @@ public class MethodCallInstructionTest {
 		vm.instructionList.addInstruction("preturn");
 
 		SvmMethod mD = new SvmMethod(
-				"retPointer:",
+				"retPointer",
 				new SvmField[] {},
 				new SvmField[] {},
 				SvmType.POINTER,
@@ -68,7 +68,7 @@ public class MethodCallInstructionTest {
 		vm.instructionList.addInstruction("vreturn");
 
 		SvmMethod mE = new SvmMethod(
-				"retAnyPointer:",
+				"retAnyPointer",
 				new SvmField[] {},
 				new SvmField[] {},
 				SvmType.POINTER,
@@ -78,7 +78,7 @@ public class MethodCallInstructionTest {
 		vm.instructionList.addInstruction("vreturn");
 
 		SvmMethod mF = new SvmMethod(
-				"retAnyInteger:",
+				"retAnyInteger",
 				new SvmField[] {},
 				new SvmField[] {},
 				SvmType.POINTER,
@@ -100,16 +100,14 @@ public class MethodCallInstructionTest {
 		int b2 = 113;
 
 		int is = vm.instructionList.addInstruction("ipush " + a);
-		vm.instructionList.addInstruction("ppush " + b);
 		vm.instructionList.addInstruction("new Test1");
-		vm.instructionList.addInstruction("invokevirtual test1:");
+		vm.instructionList.addInstruction("dup");
+		vm.instructionList.addInstruction("invokevirtual ::test1::2");
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
 
-		assertEquals(vm.instructionList.getPc(), vm.permGenSpace.getClass("Test1").lookup("test1:").instructionPointer + 1);
-
 		byte[] valA = Utils.intToByteArray(Utils.createSVMInt(a));
-		byte[] valB = Utils.intToByteArray(Utils.createSVMPointer(b));
+		byte[] valB = Utils.intToByteArray(Utils.createSVMPointer(1));
 
 		assertEquals(vm.stack.getCurrentStackFrameIndex(), 1);
 		// object pointer
@@ -191,7 +189,7 @@ public class MethodCallInstructionTest {
 		assertEquals(vm.stack.getCurrentStackFrameIndex(), 0);
 
 		int is = vm.instructionList.addInstruction("new Test1");
-		vm.instructionList.addInstruction("invokevirtual retVoid:");
+		vm.instructionList.addInstruction("invokevirtual ::retVoid::0");
 		vm.instructionList.addInstruction(null);
 		vm.instructionList.jump(is);
 		Interpreter.interpret(vm);
@@ -203,10 +201,10 @@ public class MethodCallInstructionTest {
 	@DataProvider
 	public Object[][] ipvreturnArgs() {
 		return new Object[][] {
-				{ "retInt:", SvmType.INT.getIdentByte() },
-				{ "retPointer:", SvmType.POINTER.getIdentByte() },
-				{ "retAnyPointer:", SvmType.POINTER.getIdentByte() },
-				{ "retAnyInteger:", SvmType.INT.getIdentByte() },
+				{ "::retInt::", SvmType.INT.getIdentByte() },
+				{ "::retPointer::", SvmType.POINTER.getIdentByte() },
+				{ "::retAnyPointer::", SvmType.POINTER.getIdentByte() },
+				{ "::retAnyInteger::", SvmType.INT.getIdentByte() },
 		};
 	}
 

@@ -121,6 +121,7 @@ public class ClassLoader {
 			}
 		}
 		String name = null;
+		String parentName = null;
 		@SuppressWarnings("rawtypes")
 		Iterator classAttributesIterator = root.attributeIterator();
 		while (classAttributesIterator.hasNext()) {
@@ -128,8 +129,11 @@ public class ClassLoader {
 			if (attribute.getName().equals("name")) {
 				name = attribute.getValue();
 			}
+			if (attribute.getName().equals("parentName")) {
+				parentName = attribute.getValue();
+			}
 		}
-		return new SvmClass(name, fields.toArray(new SvmField[fields.size()]), methods.toArray(new SvmMethod[methods.size()]), null);
+		return new SvmClass(name, fields.toArray(new SvmField[fields.size()]), methods.toArray(new SvmMethod[methods.size()]), parentName);
 	}
 
 	private static List<SvmField> processFieldsElement(Element fieldsElement) {
@@ -142,6 +146,7 @@ public class ClassLoader {
 
 			String name = "";
 			SvmType type = null;
+			String className = "";
 			@SuppressWarnings("rawtypes")
 			Iterator fieldAttributesIterator = fieldElement.attributeIterator();
 			while (fieldAttributesIterator.hasNext()) {
@@ -154,9 +159,10 @@ public class ClassLoader {
 					} else {
 						type = SvmType.POINTER;
 					}
+					className = attribute.getValue();
 				}
 			}
-			fields.add(new SvmField(name, type));
+			fields.add(new SvmField(name, type, className));
 		}
 		return fields;
 	}

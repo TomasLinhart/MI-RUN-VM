@@ -18,7 +18,7 @@ public class PermGenSpace {
 	public PermGenSpace(String[] classFiles, InstructionList instructionList) throws DocumentException {
 		// load libraries
 		String[] libs = new String[] { "classes/Array.xml", "classes/FileReader.xml", "classes/FileWriter.xml", "classes/String.xml"};
-		List<SvmClass> loadedClasses = ClassLoader.load( libs, instructionList);
+		List<SvmClass> loadedClasses = ClassLoader.load(libs, instructionList);
 		loadedClasses.addAll(ClassLoader.load(classFiles, instructionList));
 
 		classTable = new HashMap<String, Integer>(loadedClasses.size());
@@ -26,6 +26,17 @@ public class PermGenSpace {
 
 		for (SvmClass clazz : loadedClasses) {
 			addClass(clazz);
+		}
+
+		loadSuperClassReferences();
+	}
+
+	private void loadSuperClassReferences() {
+		for (SvmClass svmClass : classes) {
+			Integer address = classTable.get(svmClass.getSuperClassName());
+			if (address != null) {
+				svmClass.setSuperClass(classes.get(address));
+			}
 		}
 	}
 
