@@ -49,6 +49,10 @@ Maven projekt:
 
 ------------
 
+V Inheritance.xml se nahází test dědění a double dispatch.
+
+------------
+
 Seznam instrukcí VM:
 
 - ipush = vloží int na zásobník

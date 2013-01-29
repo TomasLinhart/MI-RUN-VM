@@ -9,3 +9,5 @@ test-output/
 .idea/
 *.iml
 *.zip
+result.txt
+
